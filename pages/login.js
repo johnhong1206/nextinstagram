@@ -103,7 +103,7 @@ function Login() {
           </form>
           <div className="flex justify-center flex-col w-full bg-white p-4 border border-gray-100">
             <p>
-              Don't have account?
+              Dont have account?
               <span
                 onClick={() => router.push("/register")}
                 className="ml-1 hover:underline cursor-pointer"
