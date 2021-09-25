@@ -17,6 +17,7 @@ function PostHeader({ username, userDocId, timestamp }) {
         <div className="flex items-center">
           <Link href={`/profile/${userId}`} className="flex items-center">
             <img
+              loading="lazy"
               src={userImage}
               className="rounded-full h-8 w-8 flex mr-3 cursor-pointer"
               alt={`${username} profile picture`}

@@ -23,7 +23,9 @@ function Header() {
   const [userData] = useDocument(user && userRef);
   const username = userData?.data().username;
   const userId = userData?.data().userId;
+  const userImage = userData?.data().photoURL;
   const [toggle, setToggle] = useState(false);
+  console.log("userImage", userImage);
 
   const navtoHome = (e) => {
     router.push("/");
@@ -35,6 +37,10 @@ function Header() {
 
   const navtoReginter = (e) => {
     router.push("/register");
+  };
+
+  const navtoFollowerList = () => {
+    router.push("/followerlist");
   };
 
   const togglelogout = () => {
@@ -106,7 +112,10 @@ function Header() {
                   >
                     <Image
                       className="rounded-full cursor-pointer"
-                      src={user?.photoURL}
+                      src={
+                        user?.photoURL ||
+                        "https://thumbs.dreamstime.com/b/no-image-available-icon-flat-vector-no-image-available-icon-flat-vector-illustration-132482953.jpg"
+                      }
                       width="40"
                       height="40"
                       layout="fixed"
@@ -133,6 +142,15 @@ function Header() {
                                 className=" hover:underline"
                               >
                                 Explore
+                              </h3>
+                            </div>
+                            <div className="lg:hidden flex items-center justify-center hover:animate-pulse filte ">
+                              <h3
+                                onClick={navtoFollowerList}
+                                className=" hover:underline"
+                              >
+                                <span>To</span>
+                                <span className="ml-1">Follow</span>
                               </h3>
                             </div>
                             <div className="lg:hidden flex items-center justify-center hover:animate-pulse filte ">

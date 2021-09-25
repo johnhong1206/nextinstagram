@@ -5,12 +5,10 @@ import { useCollection, useDocument } from "react-firebase-hooks/firestore";
 import { BiDotsHorizontalRounded } from "react-icons/bi";
 import moment from "moment";
 
-function NoLoginPostHeader({ userDocId, timestamp }) {
+function NoLoginPostHeader({ userDocId, timestamp, username, userId }) {
   const userRef = db.collection("users").doc(userDocId);
   const [userData] = useDocument(userDocId && userRef);
   const userImage = userData?.data().photoURL;
-  const userId = userData?.data().userId;
-  const username = userData?.data().username;
 
   return (
     <div className="flex items-baseline justify-between border-b border-gray-300 ">

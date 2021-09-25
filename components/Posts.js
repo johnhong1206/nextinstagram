@@ -15,7 +15,12 @@ function Posts({ content }) {
         userDocId={content.userId}
         timestamp={content.timestamp?.toDate().getTime()}
       />
-      <img src={content.image} alt={content.caption} className="h-1/2" />
+      <img
+        loading="lazy"
+        src={content.image}
+        alt={content.caption}
+        className="h-1/2"
+      />
       <PostAction
         docId={content.docId}
         totalLikes={content.likes.length}

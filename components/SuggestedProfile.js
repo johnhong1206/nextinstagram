@@ -36,9 +36,6 @@ function SuggestedProfile({
             layout="fixed"
             alt="user photo"
             objectFit="cover"
-            onError={(e) => {
-              e.target.src = DEFAULT_IMAGE_PATH;
-            }}
           />
 
           <p className="ml-4 font-bold text-sm cursor-pointer">{username}</p>

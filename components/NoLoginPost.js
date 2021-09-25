@@ -4,16 +4,17 @@ import PostAction from "./PostAction";
 import PostFooter from "./PostFooter";
 import PostComments from "./PostComments";
 
-function NoLoginPost({ content, profileId }) {
+function NoLoginPost({ content, profileId, username, userId }) {
   const commentInput = useRef(null);
   const handleFocus = () => commentInput.current.focus();
 
-  console.log(profileId);
+  console.log(username);
+
   return (
     <div className="rounded col-span-4 border bg-white border-gray-primary mb-12 shadow-2xl">
       <NoLoginPostHeader
-        username={content.username}
-        userDocId={content.userId}
+        username={username}
+        userDocId={userId}
         timestamp={content.timestamp?.toDate().getTime()}
       />
       <img
