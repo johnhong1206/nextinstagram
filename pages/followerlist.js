@@ -7,12 +7,13 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { useDocument } from "react-firebase-hooks/firestore";
 import Header from "../components/Header";
 
-function followerlist() {
+function Followerlist() {
   const [user] = useAuthState(auth);
   const [userData, loading] = useDocument(
     user && db.collection("users").doc(user?.uid)
   );
   if (loading) return <Skeleton count={1} height={61} />;
+
   return (
     <div>
       <Header />
@@ -35,4 +36,4 @@ function followerlist() {
   );
 }
 
-export default followerlist;
+export default Followerlist;

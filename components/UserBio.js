@@ -218,7 +218,7 @@ function UserBio({
           </>
         ) : (
           <div className=" shadow-2xl p-0 lg:p-9 w-full h-56 rounded-full flex flex-col items-center justify-center">
-            <div class="">
+            <div className="">
               <h3 className="font-medium">Update Profile Pic</h3>
             </div>
             <div className="">

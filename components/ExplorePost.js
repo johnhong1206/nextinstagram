@@ -2,11 +2,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { Circle } from "better-react-spinkit";
 
-function ExplorePost({ content, loading }) {
+function ExplorePost({ key, id, content, loading }) {
   return (
     <>
       <Link href={`/profile/${content?.userId}`} className="flex items-center">
-        <div className="cursor-pointer hover:opacity-90">
+        <div key={key} className="cursor-pointer hover:opacity-90">
           {!loading ? (
             <Image
               src={content.image}
