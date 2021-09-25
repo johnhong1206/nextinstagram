@@ -45,6 +45,7 @@ function UserBio({
   const [followerCount, setFollowerCount] = useState(followers?.length);
   const [editProfile, setEditProfile] = useState(false);
   const [input, setInput] = useState("");
+  const biosRef = useRef(null);
   const [profilemage, setProfileImage] = useState(null);
   const [progress, setProgress] = useState(0);
   const userChatRef = db
@@ -100,7 +101,7 @@ function UserBio({
   const UpdateUserBios = (e) => {
     e.preventDefault();
 
-    if (!input) {
+    if (!biosRef) {
       setEditProfile(false);
       return false;
     }
@@ -108,7 +109,7 @@ function UserBio({
       .doc(profileDocId)
       .set(
         {
-          bios: input,
+          bios: biosRef.current.value,
         },
         { merge: true }
       )
@@ -351,8 +352,7 @@ function UserBio({
               <input
                 className="p-2 h-12 w-full placeholder-gray-700  outline-none bg-white  -ml-2 shadow-lg"
                 type="text"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
+                ref={biosRef}
                 placeholder={`Update Bios ${bios}`}
               />
               <MdUpdate

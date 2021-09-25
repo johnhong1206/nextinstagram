@@ -4,9 +4,11 @@ import PostAction from "./PostAction";
 import PostFooter from "./PostFooter";
 import PostComments from "./PostComments";
 
-function NoLoginPost({ content }) {
+function NoLoginPost({ content, profileId }) {
   const commentInput = useRef(null);
   const handleFocus = () => commentInput.current.focus();
+
+  console.log(profileId);
   return (
     <div className="rounded col-span-4 border bg-white border-gray-primary mb-12 shadow-2xl">
       <NoLoginPostHeader
@@ -14,7 +16,12 @@ function NoLoginPost({ content }) {
         userDocId={content.userId}
         timestamp={content.timestamp?.toDate().getTime()}
       />
-      <img src={content.image} alt={content.caption} className="h-1/2" />
+      <img
+        loading="lazy"
+        src={content.image}
+        alt={content.caption}
+        className="h-1/2"
+      />
       <PostAction
         docId={content.docId}
         totalLikes={content.likes.length}
