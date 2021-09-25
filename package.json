@@ -9,12 +9,31 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@badrap/bar-of-progress": "^0.1.2",
+    "@reduxjs/toolkit": "^1.6.1",
+    "better-react-spinkit": "^2.0.4",
+    "firebase": "8.6.2",
+    "moment": "^2.29.1",
     "next": "11.1.2",
+    "next-compose-plugins": "^2.2.1",
+    "next-images": "^1.8.1",
+    "next-videos": "^1.4.0",
     "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react-dom": "17.0.2",
+    "react-firebase-hooks": "^3.0.4",
+    "react-icons": "^4.2.0",
+    "react-loading-skeleton": "^2.2.0",
+    "react-redux": "^7.2.5",
+    "redux": "^4.1.1",
+    "redux-persist": "^6.0.0",
+    "redux-thunk": "^2.3.0",
+    "tailwind-scrollbar-hide": "^1.0.3"
   },
   "devDependencies": {
+    "autoprefixer": "^10.3.4",
     "eslint": "7.32.0",
-    "eslint-config-next": "11.1.2"
+    "eslint-config-next": "11.1.2",
+    "postcss": "^8.3.6",
+    "tailwindcss": "^2.2.14"
   }
 }
