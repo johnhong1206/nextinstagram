@@ -76,18 +76,6 @@ function FollowerUserList({
           <p className="ml-4 font-bold text-sm cursor-pointer">{username}</p>
         </div>
       </Link>
-      <button
-        className="text-xs font-bold text-blue-400"
-        type="button"
-        onClick={handleToggleFollow}
-        onKeyDown={(event) => {
-          if (event.key === "Enter") {
-            handleToggleFollow();
-          }
-        }}
-      >
-        UnFollow
-      </button>
     </div>
   ) : null;
 }
