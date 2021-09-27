@@ -35,7 +35,7 @@ function Followerlist() {
             <Follower
               username={userData?.data().username}
               userId={userData?.data().userId}
-              following={userData?.data().follower}
+              follower={userData?.data().follower}
               loggedInUserDocId={userData?.id}
               following={userData?.data().following}
             />

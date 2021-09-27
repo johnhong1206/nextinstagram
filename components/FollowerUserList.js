@@ -23,7 +23,7 @@ function FollowerUserList({
   const userId = user?.profileDocId;
   const userdocId = userId;
 
-  const profileUserId = profileDocId;
+  const profileUserId = profileId;
   const [isFollowingProfile, setIsFollowingProfile] = useState(null);
 
   const handleToggleFollow = async () => {
