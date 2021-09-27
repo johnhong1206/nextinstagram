@@ -22,7 +22,7 @@ function SuggestedProfile({
     await updateFollowedUserFollowers(profileDocId, userId, false);
   }
 
-  console.log("profileDocId", profileDocId);
+  if (userId === profileId) return false;
 
   return !followed ? (
     <div className="flex flex-row items-center align-items justify-between">

@@ -27,10 +27,28 @@ export async function getUserByUserId(userId) {
 export async function getSuggestedProfiles(userId, following) {
   let query = firebase.firestore().collection("users");
 
-  if (following.length > 0) {
+  if (following?.length > 0) {
     query = query.where("userId", "not-in", [...following, userId]);
   } else {
     query = query.where("userId", "!=", userId);
+  }
+  const result = await query.limit(10).get();
+
+  const profiles = result.docs.map((user) => ({
+    ...user.data(),
+    docId: user.id,
+  }));
+
+  return profiles;
+}
+
+export async function getfollower(userId, following) {
+  let query = firebase.firestore().collection("users");
+
+  if (following?.length > 0) {
+    query = query.where("userId", "in", [...following, userId]);
+  } else {
+    query = query.where("userId", "!==", userId);
   }
   const result = await query.limit(10).get();
 
