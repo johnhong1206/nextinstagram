@@ -26,6 +26,8 @@ function Posts({ content }) {
         totalLikes={content.likes.length}
         likedPhoto={content.userLikedPhoto}
         handleFocus={handleFocus}
+        content={content}
+        save={content.save}
       />
       <PostFooter caption={content.caption} username={content.username} />
       <PostComments

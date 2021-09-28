@@ -21,11 +21,10 @@ function Header() {
   const [user, loading] = useAuthState(auth);
   const userRef = db.collection("users").doc(user?.uid);
   const [userData] = useDocument(user && userRef);
-  const username = userData?.data().username;
-  const userId = userData?.data().userId;
-  const userImage = userData?.data().photoURL;
+  //const username = userData?.data().username;
+  //const userId = userData?.data().userId;
+  //const userImage = userData?.data().photoURL;
   const [toggle, setToggle] = useState(false);
-  console.log("userImage", userImage);
 
   const navtoHome = (e) => {
     router.push("/");
@@ -61,7 +60,7 @@ function Header() {
   };
 
   const NavtoUserProfile = (e) => {
-    router.push(`/profile/${userId}`);
+    router.push(`/profile/${user?.uid}`);
   };
 
   const NavtoExplore = (e) => {

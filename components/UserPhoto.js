@@ -3,8 +3,16 @@ import Skeleton from "react-loading-skeleton";
 import { AiFillHeart } from "react-icons/ai";
 import { BsFillChatFill } from "react-icons/bs";
 import Image from "next/image";
+import { useRouter } from "next/router";
 
 function UserPhoto({ photo }) {
+  const router = useRouter();
+
+  const navProfile = () => {
+    router.push(`/profile/${photo?.userid}`);
+  };
+
+  console.log("photo", photo.userId);
   return (
     <div className="">
       <div className="">
@@ -13,13 +21,18 @@ function UserPhoto({ photo }) {
             .fill(0)
             .map((_, i) => <Skeleton key={i} width={320} height={400} />)
         ) : (
-          <div key={photo.docId} className="relative group cursor-pointer">
+          <div
+            key={photo.docId}
+            onClick={navProfile}
+            className="relative group cursor-pointer"
+          >
             <div className="xl:ml-10 p-2 group cursor-pointer transition duration-200 ease-in transform sm:hover:scale-105 hover:z-50">
               <Image
                 src={photo.image}
                 objectFit="contain"
                 width={400}
                 height={400}
+                onClick={navProfile}
               />
             </div>
             <div

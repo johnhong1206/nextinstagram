@@ -12,12 +12,16 @@ import db from "../../config/firebase";
 import Header from "../../components/Header";
 import UserBio from "../../components/UserBio";
 import UserPhoto from "../../components/UserPhoto";
+import { AiOutlineInstagram } from "react-icons/ai";
+import { IoBookmarkOutline } from "react-icons/io5";
 
 function Profile({ bio, photos }) {
   const dispatch = useDispatch();
   const router = useRouter();
   const [userData, setUserData] = useState([]);
   const [photo, setPhoto] = useState([]);
+  const [phase, setPhase] = useState("Photo");
+
   const photoCollecction = useSelector(selectPhotos);
   const userProfile = useSelector(selectProfile);
 
@@ -66,6 +70,7 @@ function Profile({ bio, photos }) {
           followingCount: userData?.following?.length,
           bios: userData?.bios,
           email: userData?.email,
+          savePhoto: userData?.savePhoto,
         })
       );
     }
@@ -96,10 +101,26 @@ function Profile({ bio, photos }) {
     ));
   };
 
+  const showSavePhoto = () => {
+    userProfile?.savePhoto?.map((photo) => (
+      <div key={photo.photoId}>
+        <h1>{photo.username}</h1>
+      </div>
+    ));
+  };
+
   useEffect(() => {
     dispatch(addPhoto(photo));
   });
 
+  const togglePhase = () => {
+    if (phase === "Photo") {
+      setPhase("Saved");
+    }
+    if (phase === "Saved") {
+      setPhase("Photo");
+    }
+  };
   return (
     <div className="w-full">
       <Head>
@@ -111,9 +132,30 @@ function Profile({ bio, photos }) {
       {bio ? (
         <main>
           {userProfile ? showBio() : null}
-          <div className="px-5 my-10 gap-8 sm:grid md:grid-cols-2 xl:grid-cols-3 3xl:flex flex-wrap items-center justify-center">
-            {ShowPhoto()}
+          <div className="flex flex-row items-center justify-center w-full my-4 space-x-4">
+            <Phase
+              name={"Photo"}
+              isActive={phase == "Photo" ? true : false}
+              togglePhase={togglePhase}
+            />
+            <Phase
+              name={"Saved"}
+              isActive={phase == "Saved" ? true : false}
+              togglePhase={togglePhase}
+            />
           </div>
+          {phase == "Photo" && (
+            <div className="px-5 my-10 gap-8 sm:grid md:grid-cols-2 xl:grid-cols-3 3xl:flex flex-wrap items-center justify-center">
+              {ShowPhoto()}
+            </div>
+          )}
+          {phase == "Saved" && (
+            <div className="px-5 my-10 gap-8 sm:grid md:grid-cols-2 xl:grid-cols-3 3xl:flex flex-wrap items-center justify-center">
+              {userProfile?.savePhoto?.map((photo) => (
+                <UserPhoto key={photo.id} photo={photo} />
+              ))}
+            </div>
+          )}
         </main>
       ) : null}
     </div>
@@ -150,3 +192,40 @@ export async function getServerSideProps(context) {
     },
   };
 }
+
+const Phase = ({ name, isActive, togglePhase, Icon }) => {
+  return (
+    <div className={`flex flex-col items-center `}>
+      <div className={`flex flex-row items-center justify-center space-x-1 `}>
+        <h1
+          className={`font-bold ${
+            isActive ? "text-gray-500" : "text-gray-300"
+          }`}
+        >
+          {name}
+        </h1>
+        {name == "Photo" && (
+          <AiOutlineInstagram
+            className={`font-bold ${
+              isActive ? "text-gray-500" : "text-gray-300"
+            }`}
+          />
+        )}
+        {name == "Saved" && (
+          <IoBookmarkOutline
+            className={`font-bold ${
+              isActive ? "text-gray-500" : "text-gray-300"
+            }`}
+          />
+        )}
+      </div>
+
+      <div
+        onClick={togglePhase}
+        className={`w-4 h-4 rounded-full cursor-pointer ${
+          isActive ? "bg-blue-600" : "bg-gray-400"
+        }`}
+      />
+    </div>
+  );
+};
