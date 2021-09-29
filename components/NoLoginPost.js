@@ -8,8 +8,6 @@ function NoLoginPost({ content, profileId, username, userId }) {
   const commentInput = useRef(null);
   const handleFocus = () => commentInput.current.focus();
 
-  console.log(username);
-
   return (
     <div className="rounded col-span-4 border bg-white border-gray-primary mb-12 shadow-2xl">
       <NoLoginPostHeader

@@ -11,8 +11,6 @@ function Message({ username, message, email, photoURL, userId }) {
   const [userData] = useDocument(userId && userRef);
   const userImage = userData?.data().photoURL;
 
-  console.log("userImg", userImage);
-
   return (
     <div className="p-4 mt-0 lg:mt-4">
       <div className="relative">

@@ -14,12 +14,13 @@ function PostAction({
   save,
   handleFocus,
   content,
+  savedPhoto,
 }) {
   const [user] = useAuthState(auth);
   const userId = user?.uid;
   const [toggleLiked, setToggleLiked] = useState(likedPhoto);
   const [likes, setLikes] = useState(totalLikes);
-  const [toggleSaved, setToggleSaved] = useState(save);
+  const [toggleSaved, setToggleSaved] = useState(savedPhoto);
 
   const handleToggleLiked = async () => {
     setToggleLiked((toggleLiked) => !toggleLiked);

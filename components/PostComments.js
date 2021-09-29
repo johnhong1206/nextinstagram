@@ -11,6 +11,7 @@ function PostComments({ docId, comments: allComments, posted, commentInput }) {
   const showNextComments = () => {
     setCommentsSlice(commentsSlice + 2);
   };
+
   return (
     <>
       <div className="p-4 pt-1 pb-4">

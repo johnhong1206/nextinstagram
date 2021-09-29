@@ -12,13 +12,14 @@ import db, { auth } from "../config/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useDocument } from "react-firebase-hooks/firestore";
 import { useState } from "react";
-import { logout } from "../features/userSlice";
-import { useDispatch } from "react-redux";
+import { logout, selectUser } from "../features/userSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 function Header() {
   const router = useRouter();
   const dispatch = useDispatch();
   const [user, loading] = useAuthState(auth);
+  const userRedux = useSelector(selectUser);
   const userRef = db.collection("users").doc(user?.uid);
   const [userData] = useDocument(user && userRef);
   //const username = userData?.data().username;
@@ -112,12 +113,13 @@ function Header() {
                     <Image
                       className="rounded-full cursor-pointer"
                       src={
-                        user?.photoURL ||
+                        userRedux?.image ||
                         "https://thumbs.dreamstime.com/b/no-image-available-icon-flat-vector-no-image-available-icon-flat-vector-illustration-132482953.jpg"
                       }
                       width="40"
                       height="40"
                       layout="fixed"
+                      quality="50"
                     />
                     {toggle && (
                       <div

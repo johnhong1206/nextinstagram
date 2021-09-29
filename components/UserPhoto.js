@@ -12,7 +12,6 @@ function UserPhoto({ photo }) {
     router.push(`/profile/${photo?.userid}`);
   };
 
-  console.log("photo", photo.userId);
   return (
     <div className="">
       <div className="">
@@ -28,11 +27,13 @@ function UserPhoto({ photo }) {
           >
             <div className="xl:ml-10 p-2 group cursor-pointer transition duration-200 ease-in transform sm:hover:scale-105 hover:z-50">
               <Image
+                loading="lazy"
                 src={photo.image}
                 objectFit="contain"
                 width={400}
                 height={400}
                 onClick={navProfile}
+                quality="50"
               />
             </div>
             <div

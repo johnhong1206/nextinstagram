@@ -13,7 +13,7 @@ function ExplorePost({ key, id, content, loading }) {
               layout="responsive"
               height={1080}
               width={1920}
-              quality="75"
+              quality="50"
               alt="poster"
             />
           ) : (

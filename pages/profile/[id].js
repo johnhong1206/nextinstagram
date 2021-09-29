@@ -8,22 +8,24 @@ import {
   selectProfile,
 } from "../../features/userSlice";
 import Head from "next/head";
-import db from "../../config/firebase";
+import db, { auth } from "../../config/firebase";
 import Header from "../../components/Header";
 import UserBio from "../../components/UserBio";
 import UserPhoto from "../../components/UserPhoto";
 import { AiOutlineInstagram } from "react-icons/ai";
 import { IoBookmarkOutline } from "react-icons/io5";
 
-function Profile({ bio, photos }) {
+import { useAuthState } from "react-firebase-hooks/auth";
+
+function Profile({ bio, photos, savephotos }) {
   const dispatch = useDispatch();
+  const user = useAuthState(auth);
+  const userProfile = useSelector(selectProfile);
+  const photoCollecction = useSelector(selectPhotos);
   const router = useRouter();
   const [userData, setUserData] = useState([]);
   const [photo, setPhoto] = useState([]);
   const [phase, setPhase] = useState("Photo");
-
-  const photoCollecction = useSelector(selectPhotos);
-  const userProfile = useSelector(selectProfile);
 
   useEffect(() => {
     if (router.query.id) {
@@ -102,10 +104,8 @@ function Profile({ bio, photos }) {
   };
 
   const showSavePhoto = () => {
-    userProfile?.savePhoto?.map((photo) => (
-      <div key={photo.photoId}>
-        <h1>{photo.username}</h1>
-      </div>
+    return JSON.parse(savephotos).map((photo) => (
+      <UserPhoto key={photo.id} photo={photo} />
     ));
   };
 
@@ -151,9 +151,7 @@ function Profile({ bio, photos }) {
           )}
           {phase == "Saved" && (
             <div className="px-5 my-10 gap-8 sm:grid md:grid-cols-2 xl:grid-cols-3 3xl:flex flex-wrap items-center justify-center">
-              {userProfile?.savePhoto?.map((photo) => (
-                <UserPhoto key={photo.id} photo={photo} />
-              ))}
+              {showSavePhoto()}
             </div>
           )}
         </main>
@@ -185,10 +183,21 @@ export async function getServerSideProps(context) {
     docId: photo.id,
   }));
 
+  const savedPhotoRef = await db
+    .collection("photos")
+    .where("save", "array-contains", context.query.id)
+    .get();
+
+  const savephotos = savedPhotoRef.docs.map((photo) => ({
+    ...photo.data(),
+    docId: photo.id,
+  }));
+
   return {
     props: {
       bio: JSON.stringify(bio),
       photos: JSON.stringify(photos),
+      savephotos: JSON.stringify(savephotos),
     },
   };
 }

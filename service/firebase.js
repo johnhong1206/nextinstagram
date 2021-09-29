@@ -122,14 +122,21 @@ export async function getPhotos(userId, following) {
   const photosWithUserDetails = await Promise.all(
     userFollowedPhotos.map(async (photo) => {
       let userLikedPhoto = false;
-      if (photo.likes.includes(userId)) {
+      let userSavedPhoto = false;
+
+      if (photo?.likes?.includes(userId)) {
         userLikedPhoto = true;
       }
+
+      if (photo?.save?.includes(userId)) {
+        userSavedPhoto = true;
+      }
+
       // photo.userId = 2
       const user = await getUserByUserId(photo.userId);
       // raphael
       const { username } = user[0];
-      return { username, ...photo, userLikedPhoto };
+      return { username, ...photo, userLikedPhoto, userSavedPhoto };
     })
   );
 

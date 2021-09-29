@@ -20,14 +20,16 @@ function Posts({ content }) {
         src={content.image}
         alt={content.caption}
         className="h-1/2"
+        quality="75"
       />
       <PostAction
         docId={content.docId}
         totalLikes={content.likes.length}
         likedPhoto={content.userLikedPhoto}
+        save={content.save}
+        savedPhoto={content.userSavedPhoto}
         handleFocus={handleFocus}
         content={content}
-        save={content.save}
       />
       <PostFooter caption={content.caption} username={content.username} />
       <PostComments

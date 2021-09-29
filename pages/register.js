@@ -68,7 +68,7 @@ function Register() {
             email: email.toLowerCase(),
             username: username.toLowerCase(),
             fullName: fullName,
-            following: ["2"],
+            following: [],
             followers: [],
             dateCreated: firebase.firestore.FieldValue.serverTimestamp(),
             photoURL:

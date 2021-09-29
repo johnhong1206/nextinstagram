@@ -17,7 +17,6 @@ function PersonChatllist({ id, users, displayName }) {
   );
 
   const peopleinChatlist = useSelector(selectChatlist);
-  console.log("peopleinChatlist", peopleinChatlist);
 
   const recipient = recipientSnapShot?.docs?.[0]?.data();
 
