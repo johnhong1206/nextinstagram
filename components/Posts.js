@@ -16,7 +16,6 @@ function Posts({ content }) {
         timestamp={content.timestamp?.toDate().getTime()}
       />
       <img
-        loading="lazy"
         src={content.image}
         alt={content.caption}
         className="h-1/2"
