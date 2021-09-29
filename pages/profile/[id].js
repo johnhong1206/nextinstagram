@@ -83,6 +83,7 @@ function Profile({ bio, photos, savephotos }) {
   const showBio = () => {
     return JSON.parse(bio).map((userData) => (
       <UserBio
+        key={userData?.userId}
         profileDocId={userData?.userId}
         profileUsername={userData?.username}
         image={userData?.photoURL}
