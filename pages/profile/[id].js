@@ -42,47 +42,47 @@ function Profile({ bio, photos, savephotos }) {
     }
   }, [router.query.id]);
 
+  async function getUserData() {
+    const unsubscribe = db
+      .collection("users")
+      .doc(router.query.id)
+      .onSnapshot((snapshot) => setUserData(snapshot.data()));
+    return unsubscribe;
+  }
+
   useEffect(() => {
     if (router.query.id) {
-      async function getUserData() {
-        const unsubscribe = db
-          .collection("users")
-          .doc(router.query.id)
-          .onSnapshot((snapshot) => setUserData(snapshot.data()));
-
-        return unsubscribe;
-      }
       getUserData();
     }
   }, [router.query.id]);
 
+  async function addVisitProfile() {
+    await dispatch(
+      addProfile({
+        profileDocId: userData?.userId,
+        profileUsername: userData?.username,
+        image: userData?.photoURL,
+        profileUserId: userData?.userId,
+        fullName: userData?.fullName,
+        photosCount: photoCollecction?.length,
+        followers: userData?.followers,
+        followersCount: userData?.followers?.length,
+        following: userData?.following,
+        followingCount: userData?.following?.length,
+        bios: userData?.bios,
+        email: userData?.email,
+        savePhoto: userData?.savePhoto,
+      })
+    );
+  }
+
   useEffect(() => {
-    async function addVisitProfile() {
-      await dispatch(
-        addProfile({
-          profileDocId: userData?.userId,
-          profileUsername: userData?.username,
-          image: userData?.photoURL,
-          profileUserId: userData?.userId,
-          fullName: userData?.fullName,
-          photosCount: photoCollecction?.length,
-          followers: userData?.followers,
-          followersCount: userData?.followers?.length,
-          following: userData?.following,
-          followingCount: userData?.following?.length,
-          bios: userData?.bios,
-          email: userData?.email,
-          savePhoto: userData?.savePhoto,
-        })
-      );
-    }
     addVisitProfile();
   });
 
   const showBio = () => {
     return JSON.parse(bio).map((userData) => (
       <UserBio
-        key={userData?.id}
         profileDocId={userData?.userId}
         profileUsername={userData?.username}
         image={userData?.photoURL}
@@ -90,9 +90,12 @@ function Profile({ bio, photos, savephotos }) {
         fullName={userData?.fullName}
         photosCount={photoCollecction?.length}
         followers={userData?.followers}
+        followersCount={userData?.followers?.length}
         following={userData?.following}
+        followingCount={userData?.following?.length}
         bios={userData?.bios}
-        profileEmail={userData?.email}
+        email={userData?.email}
+        savePhoto={userData?.savePhoto}
       />
     ));
   };
@@ -131,7 +134,7 @@ function Profile({ bio, photos, savephotos }) {
       <Header />
       {bio ? (
         <main>
-          {userProfile ? showBio() : null}
+          {showBio()}
           <div className="flex flex-row items-center justify-center w-full my-4 space-x-4">
             <Phase
               name={"Photo"}

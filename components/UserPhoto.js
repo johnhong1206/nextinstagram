@@ -34,6 +34,7 @@ function UserPhoto({ photo }) {
                 height={400}
                 onClick={navProfile}
                 quality="50"
+                alt="save image"
               />
             </div>
             <div

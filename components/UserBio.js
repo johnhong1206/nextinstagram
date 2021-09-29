@@ -30,12 +30,12 @@ function UserBio({
 }) {
   const dispatch = useDispatch();
   const imgPickerRef = useRef(null);
+  const authUser = useAuthState(auth);
 
   const router = useRouter();
   const user = useSelector(selectUser);
   const profile = useSelector(selectProfile);
-  const userRef = db.collection("users").doc(user?.uid);
-  const [userData] = useDocument(user && userRef);
+
   const username = user?.profileUsername;
   const userId = user?.profileDocId;
   const userdocId = userId;
@@ -123,6 +123,9 @@ function UserBio({
   };
 
   const handleUploadProfileimage = () => {
+    {
+      /** */
+    }
     if (user) {
       const uploadTask = storage
         .ref(`profilemage/${profilemage.name}`)
@@ -149,24 +152,24 @@ function UserBio({
             .child(profilemage.name)
             .getDownloadURL()
             .then((url) => {
-              const Updateuser = auth.currentUser;
-              db.collection("users").doc(profileDocId).set(
-                {
+              async function updateProfilePic() {
+                const Updateuser = auth.currentUser;
+                await db.collection("users").doc(profileDocId).set(
+                  {
+                    photoURL: url,
+                  },
+                  { merge: true }
+                );
+                await Updateuser.updateProfile({
                   photoURL: url,
-                },
-                { merge: true }
-              );
-              Updateuser.updateProfile({
-                photoURL: url,
-              });
+                });
+              }
+              updateProfilePic();
             })
             .then(() => {
               setProgress(0);
               setProfileImage(null);
               setEditProfile(false);
-            })
-            .then(() => {
-              router.reload();
             })
             .catch((error) => alert(error.message));
         }
@@ -175,6 +178,7 @@ function UserBio({
       alert("You are not Authorise user");
     }
   };
+
   const ChatAlreadyExists = (recipientUid) =>
     !!chatSnapshot?.docs.find(
       (chat) =>
@@ -211,7 +215,7 @@ function UserBio({
               <img
                 className="rounded-full h-40 w-40 lg:h-80 lg:w-80 flex"
                 alt={`${fullName} profile picture`}
-                src={image}
+                src={profile?.image}
               />
             ) : (
               <Skeleton circle height={150} width={150} count={1} />
@@ -219,12 +223,12 @@ function UserBio({
           </>
         ) : (
           <div className=" shadow-2xl p-0 lg:p-9 w-full h-56 rounded-full flex flex-col items-center justify-center">
-            <div className="">
+            <div className="w-full px-4">
               <h3 className="font-medium">Update Profile Pic</h3>
             </div>
-            <div className="">
+            <div className="w-full px-4">
               <center>
-                <progress value={progress} max="100" />
+                <progress value={progress} max="100" className="w-full h-4" />
               </center>
               <div className="flex flex-col lg:flex-row items-center justify-center  w-full space-x-4">
                 <div
@@ -266,7 +270,7 @@ function UserBio({
             }`}
             d
           >
-            <p className="text-2xl mr-4 uppercase">{profileUsername}</p>
+            <p className="text-2xl mr-4 uppercase">{profile.profileUsername}</p>
             {activeBtnFollow && (
               <button
                 className={`font-bold text-sm rounded text-black w-20 h-8 ${
