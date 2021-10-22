@@ -45,7 +45,7 @@ function ViewStoriesModal({ stories }) {
             interval={10000}
           >
             {viewStory.map((story) => (
-              <div onClick={quitView}>
+              <div key={story?.id} onClick={quitView}>
                 <img
                   src={story?.images}
                   className="w-[550px] h-[550px] object-contain"
