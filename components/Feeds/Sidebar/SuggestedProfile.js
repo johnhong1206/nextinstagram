@@ -5,7 +5,7 @@ import Link from "next/link";
 import {
   updateLoggedInUserFollowing,
   updateFollowedUserFollowers,
-} from "../service/firebase";
+} from "../../../service/firebase";
 
 function SuggestedProfile({
   profileDocId,

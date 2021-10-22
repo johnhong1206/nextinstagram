@@ -4,11 +4,15 @@ import Head from "next/head";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../features/userSlice";
-import Header from "../../components/Header";
-import PersonChatllist from "../../components/PersonChatllist";
+import Header from "../../components/Header/Header";
+import PersonChatllist from "../../components/Chat/PersonChatllist";
 import db from "../../config/firebase";
+import MenuModal from "../../components/Modal/MenuModal";
+import { selectMenuModalIsOpen } from "../../features/modalSlice";
 
 function Index() {
+  const menuModal = useSelector(selectMenuModalIsOpen);
+
   const user = useSelector(selectUser);
   const userChatRef = db
     .collection("chats")
@@ -23,7 +27,6 @@ function Index() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header />
-
       <main className="max-w-screen mx-auto">
         <div className="flex p-10">
           <div className="flex flex-col flex-grow w-2/3">
@@ -38,6 +41,7 @@ function Index() {
           </div>
         </div>
       </main>
+      {menuModal && <MenuModal />}
     </div>
   );
 }

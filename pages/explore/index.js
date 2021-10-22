@@ -1,13 +1,17 @@
 import React from "react";
 import { useCollection } from "react-firebase-hooks/firestore";
-import Header from "../../components/Header";
-import ExplorePost from "../../components/ExplorePost";
+import Header from "../../components/Header/Header";
+import ExplorePost from "../../components/Explore/ExplorePost";
 import db from "../../config/firebase";
 import { Circle } from "better-react-spinkit";
+import { useSelector } from "react-redux";
+import { selectMenuModalIsOpen } from "../../features/modalSlice";
+import MenuModal from "../../components/Modal/MenuModal";
 
 function Index() {
   const photoRef = db.collection("photos");
   const [photoSnapshot, loading] = useCollection(photoRef);
+  const menuModal = useSelector(selectMenuModalIsOpen);
 
   return (
     <div>
@@ -82,6 +86,7 @@ function Index() {
           </>
         )}
       </main>
+      {menuModal && <MenuModal />}
     </div>
   );
 }

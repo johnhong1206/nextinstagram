@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 
-import ChatHeader from "../../components/ChatHeader";
+import ChatHeader from "../../components/Chat/ChatHeader";
 import db, { auth } from "../../config/firebase";
 import firebase from "firebase";
 
@@ -8,7 +8,7 @@ import { useEffect, useRef, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useCollection, useDocument } from "react-firebase-hooks/firestore";
 
-import Message from "../../components/Message";
+import Message from "../../components/Chat/Message";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../features/userSlice";
 

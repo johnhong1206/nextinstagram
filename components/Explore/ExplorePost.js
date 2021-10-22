@@ -8,13 +8,13 @@ function ExplorePost({ key, id, content, loading }) {
       <Link href={`/profile/${content?.userId}`} className="flex items-center">
         <div key={key} className="cursor-pointer hover:opacity-90">
           {!loading ? (
-            <Image
+            <img
               src={content.image}
               layout="responsive"
               height={1080}
               width={1920}
               quality="50"
-              alt="poster"
+              alt="img"
             />
           ) : (
             <Circle color="#4c68d7" size={60} />

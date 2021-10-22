@@ -1,8 +1,8 @@
 import React from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "../config/firebase";
+import { auth } from "../../config/firebase";
 import moment from "moment";
-import db from "../config/firebase";
+import db from "../../config/firebase";
 import { useDocument } from "react-firebase-hooks/firestore";
 
 function Message({ username, message, email, photoURL, userId }) {

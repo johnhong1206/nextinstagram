@@ -143,6 +143,107 @@ export async function getPhotos(userId, following) {
   return photosWithUserDetails;
 }
 
+export async function getMyPhotos(userId, following) {
+  // [5,4,2] => following
+  const result = await firebase
+    .firestore()
+    .collection("photos")
+    .where("userId", "==", userId)
+    .get();
+
+  const userFollowedPhotos = result.docs.map((photo) => ({
+    ...photo.data(),
+    docId: photo.id,
+  }));
+
+  //console.log("myPhotos", userFollowedPhotos);
+
+  const photosWithUserDetails = await Promise.all(
+    userFollowedPhotos.map(async (photo) => {
+      let userLikedPhoto = false;
+      let userSavedPhoto = false;
+
+      if (photo?.likes?.includes(userId)) {
+        userLikedPhoto = true;
+      }
+
+      if (photo?.save?.includes(userId)) {
+        userSavedPhoto = true;
+      }
+
+      // photo.userId = 2
+      const user = await getUserByUserId(photo.userId);
+      // raphael
+      const { username } = user[0];
+      return { username, ...photo, userLikedPhoto, userSavedPhoto };
+    })
+  );
+
+  return photosWithUserDetails;
+}
+
+export async function getStories(userId, following) {
+  // [5,4,2] => following
+  const result = await firebase
+    .firestore()
+    .collection("stories")
+    .where("userId", "in", following)
+    .get();
+
+  const userFollowedPhotos = result.docs.map((photo) => ({
+    ...photo.data(),
+    docId: photo.id,
+  }));
+
+  const storiesWithUserDetails = await Promise.all(
+    userFollowedPhotos.map(async (photo) => {
+      let userLikedPhoto = false;
+      let userSavedPhoto = false;
+
+      if (photo?.likes?.includes(userId)) {
+        userLikedPhoto = true;
+      }
+
+      if (photo?.save?.includes(userId)) {
+        userSavedPhoto = true;
+      }
+
+      // photo.userId = 2
+      const user = await getUserByUserId(photo.userId);
+      // raphael
+      const { username } = user[0];
+      return { username, ...photo, userLikedPhoto, userSavedPhoto };
+    })
+  );
+
+  return storiesWithUserDetails;
+}
+
+export async function getNoUserPhotos() {
+  // [5,4,2] => following
+  const result = await firebase.firestore().collection("photos").get();
+
+  const photos = result.docs.map((photo) => ({
+    ...photo.data(),
+    docId: photo.id,
+  }));
+
+  const photosWithUserDetails = await Promise.all(
+    photos.map(async (photo) => {
+      let userLikedPhoto = false;
+      let userSavedPhoto = false;
+
+      // photo.userId = 2
+      const user = await getUserByUserId(photo.userId);
+      // raphael
+      const { username } = user[0];
+      return { username, ...photo, userLikedPhoto, userSavedPhoto };
+    })
+  );
+
+  return photosWithUserDetails;
+}
+
 export async function isUserFollowingProfile(
   loggedInUserUsername,
   profileUserId

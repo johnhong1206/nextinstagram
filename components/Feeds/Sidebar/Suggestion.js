@@ -3,15 +3,14 @@ import Skeleton from "react-loading-skeleton";
 //components
 import SuggestedProfile from "./SuggestedProfile";
 //services
-import { getSuggestedProfiles, getfollower } from "../service/firebase";
-import FollowerUserList from "../components/FollowerUserList";
+import { getSuggestedProfiles } from "../../../service/firebase";
 
-function Follower({ username, userId, following, loggedInUserDocId }) {
+function Suggestion({ userId, following, loggedInUserDocId }) {
   const [profiles, setProfiles] = useState(null);
 
   useEffect(() => {
     async function suggestedProfiles() {
-      const response = await getfollower(userId, following);
+      const response = await getSuggestedProfiles(userId, following);
       setProfiles(response);
     }
 
@@ -23,13 +22,14 @@ function Follower({ username, userId, following, loggedInUserDocId }) {
   return !profiles ? (
     <Skeleton count={1} height={150} className="mt-5" />
   ) : profiles.length > 0 ? (
-    <div className="rounded flex flex-col">
-      <div className="text-sm flex items-center align-items justify-between mb-2">
-        <p className="font-bold text-gray-base">{username} Following List </p>
+    <div className="mt-4 ml-10">
+      <div className="flex justify-between text-sm mb-5">
+        <h3 className="text-sm font-bold text-gray-400">Suggestions for you</h3>
+        <button className="text-sm font-semibold text-gray-600">See All</button>
       </div>
       <div className="mt-4 grid gap-5">
         {profiles.map((profile) => (
-          <FollowerUserList
+          <SuggestedProfile
             key={profile.docId}
             profileDocId={profile.docId}
             username={profile.username}
@@ -44,4 +44,4 @@ function Follower({ username, userId, following, loggedInUserDocId }) {
   ) : null;
 }
 
-export default Follower;
+export default Suggestion;

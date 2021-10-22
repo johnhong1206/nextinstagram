@@ -4,7 +4,7 @@ import Head from "next/head";
 //config
 import { auth } from "../config/firebase";
 //components
-import Header from "../components/Header";
+import Header from "../components/Header/Header";
 
 function Login() {
   const router = useRouter();

@@ -3,10 +3,10 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useCollection } from "react-firebase-hooks/firestore";
-import db, { auth } from "../config/firebase";
-import getRecipientUid from "../service/getRecipientUid";
+import db, { auth } from "../../config/firebase";
+import getRecipientUid from "../../service/getRecipientUid";
 import { useDispatch, useSelector } from "react-redux";
-import { addChatlist, selectChatlist } from "../features/userSlice";
+import { addChatlist, selectChatlist } from "../../features/userSlice";
 
 function PersonChatllist({ id, users, displayName }) {
   const dispatch = useDispatch();

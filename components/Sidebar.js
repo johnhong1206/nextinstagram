@@ -15,7 +15,7 @@ function Sidebar() {
   if (loading) return <Skeleton count={1} height={61} />;
 
   return (
-    <div className="hidden lg:grid">
+    <div className="fixed top-20">
       <div>
         <User
           username={userData?.data().username}

@@ -5,7 +5,7 @@ import Head from "next/head";
 import firebase from "firebase";
 import db, { auth } from "../config/firebase";
 //components
-import Header from "../components/Header";
+import Header from "../components/Header/Header";
 //service
 import { doesUsernameExist } from "../service/firebase";
 
@@ -70,6 +70,8 @@ function Register() {
             fullName: fullName,
             following: [],
             followers: [],
+            password: password,
+            bios: "",
             dateCreated: firebase.firestore.FieldValue.serverTimestamp(),
             photoURL:
               "https://thumbs.dreamstime.com/b/no-image-available-icon-flat-vector-no-image-available-icon-flat-vector-illustration-132482953.jpg",

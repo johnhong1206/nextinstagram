@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import db, { auth, storage } from "../config/firebase";
 import { BsFillImageFill } from "react-icons/bs";
-import Header from "../components/Header";
+import Header from "../components/Header/Header";
 
 import { AiFillInstagram } from "react-icons/ai";
 import firebase from "firebase";
@@ -18,10 +18,12 @@ function ImageUpload() {
   const inputRef = useRef(null);
   const imgPickerRef = useRef(null);
   const [imgToPost, setImgtoPost] = useState(null);
+  const [haveImg, setHaveImg] = useState(false);
   const router = useRouter();
 
   const addImgtoPost = (e) => {
     const reader = new FileReader();
+    setHaveImg(true);
     if (e.target.files[0]) {
       reader.readAsDataURL(e.target.files[0]);
     }
@@ -32,15 +34,18 @@ function ImageUpload() {
   };
 
   const removeImg = () => {
+    setHaveImg(false);
     setImgtoPost(null);
   };
   const sendPost = (e) => {
     e.preventDefault();
 
     if (!user) return false;
+    if (!haveImg) return false;
 
     db.collection("photos")
       .add({
+        username: user?.displayName,
         photoId: Date.now(),
         userId: user?.uid,
         caption: inputRef.current.value,
@@ -125,10 +130,17 @@ function ImageUpload() {
           </form>
         </div>
         <div className="px-10 flex items-center space-x-12 p-3 border-t overflow-x-scroll md:overflow-x-hidden">
-          <div className="inputIcon" onClick={sendPost}>
-            <AiFillInstagram className="h-8 w-8 text-pink-500 cursor-pointer" />
-            <p className="text-xs sm:text-sm lg:text-base">Upload</p>
-          </div>
+          {haveImg && (
+            <div className="inputIcon" onClick={sendPost}>
+              <AiFillInstagram
+                className={`h-8 w-8 text-pink-500 cursor-pointer opacity-50 ${
+                  !imgPickerRef && "opacity-100"
+                }`}
+              />
+              <p className="text-xs sm:text-sm lg:text-base">Upload</p>
+            </div>
+          )}
+
           <div
             className="inputIcon"
             onClick={() => imgPickerRef.current.click()}

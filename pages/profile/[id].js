@@ -6,26 +6,32 @@ import {
   addPhoto,
   addProfile,
   selectProfile,
+  selectUser,
 } from "../../features/userSlice";
 import Head from "next/head";
 import db, { auth } from "../../config/firebase";
-import Header from "../../components/Header";
-import UserBio from "../../components/UserBio";
-import UserPhoto from "../../components/UserPhoto";
+import Header from "../../components/Header/Header";
+import UserBio from "../../components/Profile/UserBio";
+import UserPhoto from "../../components/Profile/UserPhoto";
 import { AiOutlineInstagram } from "react-icons/ai";
 import { IoBookmarkOutline } from "react-icons/io5";
 
 import { useAuthState } from "react-firebase-hooks/auth";
+import NouserBio from "../../components/Profile/NouserBio";
+import { selectMenuModalIsOpen } from "../../features/modalSlice";
+import MenuModal from "../../components/Modal/MenuModal";
 
 function Profile({ bio, photos, savephotos }) {
   const dispatch = useDispatch();
   const user = useAuthState(auth);
   const userProfile = useSelector(selectProfile);
   const photoCollecction = useSelector(selectPhotos);
+  const currentUser = useSelector(selectUser);
   const router = useRouter();
   const [userData, setUserData] = useState([]);
   const [photo, setPhoto] = useState([]);
   const [phase, setPhase] = useState("Photo");
+  const menuModal = useSelector(selectMenuModalIsOpen);
 
   useEffect(() => {
     if (router.query.id) {
@@ -81,24 +87,45 @@ function Profile({ bio, photos, savephotos }) {
   });
 
   const showBio = () => {
-    return JSON.parse(bio).map((userData) => (
-      <UserBio
-        key={userData?.userId}
-        profileDocId={userData?.userId}
-        profileUsername={userData?.username}
-        image={userData?.photoURL}
-        profileUserId={userData?.userId}
-        fullName={userData?.fullName}
-        photosCount={photoCollecction?.length}
-        followers={userData?.followers}
-        followersCount={userData?.followers?.length}
-        following={userData?.following}
-        followingCount={userData?.following?.length}
-        bios={userData?.bios}
-        email={userData?.email}
-        savePhoto={userData?.savePhoto}
-      />
-    ));
+    if (currentUser) {
+      return JSON.parse(bio).map((userData) => (
+        <UserBio
+          key={userData?.userId}
+          profileDocId={userData?.userId}
+          profileUsername={userData?.username}
+          image={userData?.photoURL}
+          profileUserId={userData?.userId}
+          fullName={userData?.fullName}
+          photosCount={photoCollecction?.length}
+          followers={userData?.followers}
+          followersCount={userData?.followers?.length}
+          following={userData?.following}
+          followingCount={userData?.following?.length}
+          bios={userData?.bios}
+          email={userData?.email}
+          savePhoto={userData?.savePhoto}
+        />
+      ));
+    } else {
+      return JSON.parse(bio).map((userData) => (
+        <NouserBio
+          key={userData?.userId}
+          profileDocId={userData?.userId}
+          profileUsername={userData?.username}
+          image={userData?.photoURL}
+          profileUserId={userData?.userId}
+          fullName={userData?.fullName}
+          photosCount={photoCollecction?.length}
+          followers={userData?.followers}
+          followersCount={userData?.followers?.length}
+          following={userData?.following}
+          followingCount={userData?.following?.length}
+          bios={userData?.bios}
+          email={userData?.email}
+          savePhoto={userData?.savePhoto}
+        />
+      ));
+    }
   };
 
   const ShowPhoto = () => {
@@ -136,6 +163,7 @@ function Profile({ bio, photos, savephotos }) {
       {bio ? (
         <main>
           {showBio()}
+
           <div className="flex flex-row items-center justify-center w-full my-4 space-x-4">
             <Phase
               name={"Photo"}
@@ -160,6 +188,7 @@ function Profile({ bio, photos, savephotos }) {
           )}
         </main>
       ) : null}
+      {menuModal && <MenuModal />}
     </div>
   );
 }

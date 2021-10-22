@@ -1,5 +1,5 @@
 import Link from "next/link";
-import db from "../config/firebase";
+import db from "../../config/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useCollection, useDocument } from "react-firebase-hooks/firestore";
 import { BiDotsHorizontalRounded } from "react-icons/bi";
@@ -17,7 +17,6 @@ function PostHeader({ username, userDocId, timestamp }) {
         <div className="flex items-center">
           <Link href={`/profile/${userId}`} className="flex items-center">
             <img
-              loading="lazy"
               src={userImage}
               className="rounded-full h-8 w-8 flex mr-3 cursor-pointer"
               alt={`${username} profile picture`}

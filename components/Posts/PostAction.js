@@ -2,7 +2,7 @@ import { useState, useContext } from "react";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { BsChatDots } from "react-icons/bs";
 import { IoBookmark, IoBookmarkOutline } from "react-icons/io5";
-import db, { auth } from "../config/firebase";
+import db, { auth } from "../../config/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 
 import firebase from "firebase";

@@ -7,13 +7,13 @@ import {
   IoHomeOutline,
   IoChatboxOutline,
 } from "react-icons/io5";
-import db, { auth } from "../config/firebase";
+import db, { auth } from "../../config/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useDocument } from "react-firebase-hooks/firestore";
 import { useState } from "react";
 import { AiOutlineArrowLeft, AiFillHome } from "react-icons/ai";
 import { useCollection } from "react-firebase-hooks/firestore";
-import getRecipientUid from "../service/getRecipientUid";
+import getRecipientUid from "../../service/getRecipientUid";
 
 function ChatHeader({ chat }) {
   const router = useRouter();

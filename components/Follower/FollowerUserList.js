@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { useSelector, useDispatch } from "react-redux";
 
-import Link from "next/link";
 import {
   updateLoggedInUserFollowing,
   updateFollowedUserFollowers,
   toggleFollow,
   isUserFollowingProfile,
-} from "../service/firebase";
-import { selectUser } from "../features/userSlice";
+} from "../../service/firebase";
+import { selectUser } from "../../features/userSlice";
 
 function FollowerUserList({
   profileDocId,

@@ -8,6 +8,7 @@ export const userSlice = createSlice({
     photosCollection: null,
     followerCount: 0,
     chatlist: null,
+    userList: null,
   },
   reducers: {
     login: (state, action) => {
@@ -31,10 +32,13 @@ export const userSlice = createSlice({
     addChatlist: (state, action) => {
       state.chatlist = action.payload;
     },
+    addUserList: (state, action) => {
+      state.userList = action.payload;
+    },
   },
 });
 
-export const { login, logout, addProfile, addPhoto, addChatlist } =
+export const { login, logout, addProfile, addPhoto, addChatlist, addUserList } =
   userSlice.actions;
 
 export const selectUser = (state) => state.user.user;
@@ -44,5 +48,7 @@ export const selectProfile = (state) => state.user.profile;
 export const selectPhotos = (state) => state.user.photosCollection;
 
 export const selectChatlist = (state) => state.user.chatlist;
+
+export const selectUserList = (state) => state.user.userList;
 
 export default userSlice.reducer;
