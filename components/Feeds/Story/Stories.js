@@ -10,12 +10,7 @@ import {
   openpostStoriesModal,
   openviewStoriesModal,
 } from "../../../features/modalSlice";
-import {
-  addStories,
-  allStories,
-  updateViewedStory,
-} from "../../../features/storiesSlice";
-import { updateFilters } from "../../../../ecommerce/features/cartSlice";
+import { allStories, updateViewedStory } from "../../../features/storiesSlice";
 import { useState } from "react";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 

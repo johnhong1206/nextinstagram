@@ -1,8 +1,7 @@
-import react, { useEffect, useState } from "react";
+import { useState } from "react";
 import { useDocument } from "react-firebase-hooks/firestore";
 import { useDispatch } from "react-redux";
 import db from "../../../config/firebase";
-import { openviewStoriesModal } from "../../../features/modalSlice";
 
 function Story({ key, userId, content }) {
   const dispatch = useDispatch();
