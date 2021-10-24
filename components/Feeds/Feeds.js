@@ -7,7 +7,7 @@ import Timeline from "./Timeline/Timeline";
 
 import Suggestion from "./Sidebar/Suggestion";
 import User from "./Sidebar/User";
-import Stories from "./Story/Stories";
+import Stories from "../Story/Stories";
 
 function Feeds({ noUserphotos, stories }) {
   const [user] = useAuthState(auth);

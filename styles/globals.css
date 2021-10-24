@@ -9,6 +9,6 @@
     @apply bg-[#f6f6f6] text-gray-900;
   }
   .inputIcon {
-    @apply flex items-center space-x-1 hover:bg-gray-100 flex-grow justify-items-center p-2 rounded-xl cursor-pointer outline-none;
+    @apply cursor-pointer hover:scale-110 transform transition duration-200 ease-out;
   }
 }

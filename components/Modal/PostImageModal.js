@@ -1,13 +1,11 @@
 import React from "react";
 import { useRef, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import db, { auth, storage } from "../../config/firebase";
 import { BsFillImageFill } from "react-icons/bs";
 
 import { AiFillInstagram } from "react-icons/ai";
 import { MdCancel } from "react-icons/md";
 
-import firebase from "firebase";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,6 +14,8 @@ import {
   closepostSotryModal,
   closePostImageModal,
 } from "../../features/modalSlice";
+import db, { auth, storage } from "../../config/firebase";
+import firebase from "firebase";
 
 function PostImageModal() {
   const [user] = useAuthState(auth);
@@ -27,6 +27,8 @@ function PostImageModal() {
   const [imgToPost, setImgtoPost] = useState(null);
   const [haveImg, setHaveImg] = useState(false);
   const router = useRouter();
+  const [progress, setProgress] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   const addImgtoPost = (e) => {
     const reader = new FileReader();
@@ -47,6 +49,7 @@ function PostImageModal() {
 
   const sendPost = (e) => {
     e.preventDefault();
+    setLoading(true);
 
     if (!user) return false;
     if (!haveImg) return false;
@@ -87,13 +90,14 @@ function PostImageModal() {
                       merge: true,
                     }
                   );
+                })
+                .then(() => {
+                  router.push("/");
+                  dispatch(closePostImageModal());
                 });
             }
           );
         }
-      })
-      .then(() => {
-        router.push("/");
       });
 
     inputRef.current.value = "";
@@ -117,7 +121,9 @@ function PostImageModal() {
                 className="flex flex-col items-center justify-center filter hover:brightness-110 transition duration-150 transform hover:scale-105 cursor-pointer"
               >
                 <img
-                  className="h-60 w-60 object-contain"
+                  className={`h-60 w-60 object-contain ${
+                    loading && "opacity-50"
+                  }`}
                   src={imgToPost}
                   alt=""
                 />

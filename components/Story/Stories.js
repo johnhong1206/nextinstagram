@@ -1,44 +1,41 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useDocument } from "react-firebase-hooks/firestore";
-import db, { auth } from "../../../config/firebase";
+import { AiOutlinePlusCircle } from "react-icons/ai";
+import db, { auth } from "../../config/firebase";
+
+//components
 import Story from "./Story";
-import useStories from "../../../service/use-stories";
-import { getUniqueValues } from "../../../utils/helper";
-import { useDispatch, useSelector } from "react-redux";
+
+//services
+import useStories from "../../service/use-stories";
+import useMyStories from "../../service/use-myStories";
+import { getUniqueValues } from "../../utils/helper";
+
+//redux
+import { useDispatch } from "react-redux";
 import {
   openpostStoriesModal,
   openviewStoriesModal,
-} from "../../../features/modalSlice";
-import { allStories, updateViewedStory } from "../../../features/storiesSlice";
-import { useState } from "react";
-import { AiOutlinePlusCircle } from "react-icons/ai";
+} from "../../features/modalSlice";
+import { updateViewedStory } from "../../features/storiesSlice";
 
 function Stories() {
+  const dispatch = useDispatch();
   const [user] = useAuthState(auth);
   const userRef = db.collection("users").doc(user?.uid);
   const [userData, loading] = useDocument(user && userRef);
   const userId = user?.uid;
   const following = userData?.data().following;
   const newUserData = { userId, following };
-  const all_stories = useSelector(allStories);
-  const dispatch = useDispatch();
-  const [lastChange, setLastChange] = useState(null);
   const { stories } = useStories(newUserData);
+  const { myStories } = useMyStories(newUserData);
 
   const storiesUser = stories ? getUniqueValues(stories, "userId") : null;
+  const myStoriesUser = myStories ? getUniqueValues(myStories, "userId") : null;
 
   const opentoPostStoryModal = () => {
     dispatch(openpostStoriesModal());
-  };
-
-  const filterUsesrStory = (value, item) => {
-    dispatch(openviewStoriesModal());
-
-    const filtered = all_stories.filter((stories) =>
-      stories[item].includes(value)
-    );
-    dispatch(updateViewedStory(filtered));
   };
 
   const viewStory = (value) => {
@@ -54,6 +51,16 @@ function Stories() {
       >
         <AiOutlinePlusCircle className="text-white w-12 h-12" />
       </div>
+      {myStoriesUser &&
+        myStoriesUser.map((value) => (
+          <div
+            onClick={() => viewStory(value, "userId")}
+            className=""
+            key={value}
+          >
+            <Story key={value.id} userId={value} />
+          </div>
+        ))}
 
       {storiesUser &&
         storiesUser.map((value) => (

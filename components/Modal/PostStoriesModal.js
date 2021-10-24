@@ -1,17 +1,18 @@
+import React from "react";
 import { useRef, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
-import db, { auth, storage } from "../../config/firebase";
 import { BsFillImageFill } from "react-icons/bs";
 
 import { AiFillInstagram } from "react-icons/ai";
 import { MdCancel } from "react-icons/md";
 
-import firebase from "firebase";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "../../features/userSlice";
 import { closepostSotryModal } from "../../features/modalSlice";
+import db, { auth, storage } from "../../config/firebase";
+import firebase from "firebase";
 
 function PostStoriesModal() {
   const [user] = useAuthState(auth);
@@ -23,6 +24,8 @@ function PostStoriesModal() {
   const [imgToPost, setImgtoPost] = useState(null);
   const [haveImg, setHaveImg] = useState(false);
   const router = useRouter();
+  const [progress, setProgress] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   const addImgtoPost = (e) => {
     const reader = new FileReader();
@@ -43,12 +46,14 @@ function PostStoriesModal() {
 
   const sendPost = (e) => {
     e.preventDefault();
+    setLoading(true);
 
     if (!user) return false;
     if (!haveImg) return false;
 
     db.collection("stories")
       .add({
+        username: user?.displayName,
         photoId: Date.now(),
         userId: user?.uid,
         caption: inputRef.current.value,
@@ -76,19 +81,20 @@ function PostStoriesModal() {
                 .then((url) => {
                   db.collection("stories").doc(doc.id).set(
                     {
-                      images: url,
+                      image: url,
                     },
                     {
                       merge: true,
                     }
                   );
+                })
+                .then(() => {
+                  router.push("/");
+                  dispatch(closepostSotryModal());
                 });
             }
           );
         }
-      })
-      .then(() => {
-        router.push("/");
       });
 
     inputRef.current.value = "";
@@ -112,7 +118,9 @@ function PostStoriesModal() {
                 className="flex flex-col items-center justify-center filter hover:brightness-110 transition duration-150 transform hover:scale-105 cursor-pointer"
               >
                 <img
-                  className="h-60 w-60 object-contain"
+                  className={`h-60 w-60 object-contain ${
+                    loading && "opacity-50"
+                  }`}
                   src={imgToPost}
                   alt=""
                 />

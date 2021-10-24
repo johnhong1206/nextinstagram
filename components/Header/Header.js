@@ -26,8 +26,8 @@ function Header({ usersList }) {
 
   const [user, loading] = useAuthState(auth);
   const userRedux = useSelector(selectUser);
-  const userRef = db.collection("users").doc(user?.uid);
-  const [userData] = useDocument(user && userRef);
+  //const userRef = db.collection("users").doc(user?.uid);
+  //const [userData] = useDocument(user && userRef);
   //const username = userData?.data().username;
   //const userId = userData?.data().userId;
   //const userImage = userData?.data().photoURL;
@@ -213,29 +213,32 @@ function Header({ usersList }) {
             <p className="flex items-center  justify-center w-full space-x-4">
               {user ? (
                 <>
-                  <IoHomeOutline onClick={navtoHome} className="w-6 h-6" />
+                  <IoHomeOutline
+                    onClick={navtoHome}
+                    className="w-6 h-6 inputIcon"
+                  />
                   <IoAddCircleOutline
                     onClick={() => dispatch(openPostImageModal())}
                     className="w-6 h-6"
                   />
                   <IoLogOutOutline
                     onClick={togglelogout}
-                    className="w-7 h-7 hidden lg:inline-flex"
+                    className="w-7 h-7 hidden lg:inline-flex inputIcon"
                   />
                   <IoCompassOutline
                     onClick={NavtoExplore}
-                    className="w-7 h-7 hidden  lg:inline-flex"
+                    className="w-7 h-7 hidden  lg:inline-flex inputIcon"
                   />
                   <IoChatboxOutline
                     onClick={navtoChat}
-                    className="w-6 h-6 hidden lg:inline-flex"
+                    className="w-6 h-6 hidden lg:inline-flex inputIcon"
                   />
                   <div
                     onClick={toggleSection}
-                    className="flex flex-col items-center relative p-4 "
+                    className="flex flex-col items-center relative p-4 inputIcon"
                   >
                     <Image
-                      className="rounded-full cursor-pointer"
+                      className="rounded-full cursor-pointer inputIcon"
                       src={
                         user?.photoURL ||
                         "https://thumbs.dreamstime.com/b/no-image-available-icon-flat-vector-no-image-available-icon-flat-vector-illustration-132482953.jpg"

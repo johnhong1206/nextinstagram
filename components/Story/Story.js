@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useDocument } from "react-firebase-hooks/firestore";
 import { useDispatch } from "react-redux";
-import db from "../../../config/firebase";
+import db from "../../config/firebase";
 
 function Story({ key, userId, content }) {
   const dispatch = useDispatch();
