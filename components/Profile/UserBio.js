@@ -16,7 +16,7 @@ import { selectProfile, selectUser } from "../../features/userSlice";
 import { MdModeEdit, MdUpdate } from "react-icons/md";
 import { BsFillImageFill } from "react-icons/bs";
 
-function UserBio({ profileDocId, profileUserId, bios }) {
+function UserBio({ image, profileDocId, profileUserId, bios }) {
   const dispatch = useDispatch();
   const imgPickerRef = useRef(null);
   const authUser = useAuthState(auth);
@@ -29,8 +29,6 @@ function UserBio({ profileDocId, profileUserId, bios }) {
   const userId = user?.profileDocId;
   const userdocId = userId;
 
-  console.log(profile?.profileUsername);
-
   const [isFollowingProfile, setIsFollowingProfile] = useState(null);
   const activeBtnFollow = username && username !== profile?.profileUsername;
   const [editProfile, setEditProfile] = useState(false);
@@ -38,7 +36,7 @@ function UserBio({ profileDocId, profileUserId, bios }) {
   const biosRef = useRef(null);
   const [profilemage, setProfileImage] = useState(null);
   const [progress, setProgress] = useState(0);
-  console.log(profileDocId);
+
   const userChatRef = db
     .collection("chats")
     .where("users", "array-contains", userId);
@@ -114,9 +112,6 @@ function UserBio({ profileDocId, profileUserId, bios }) {
   };
 
   const handleUploadProfileimage = () => {
-    {
-      /** */
-    }
     if (user) {
       const uploadTask = storage
         .ref(`profilemage/${profilemage.name}`)
@@ -203,7 +198,7 @@ function UserBio({ profileDocId, profileUserId, bios }) {
           <img
             className="rounded-full h-40 w-40 lg:h-80 lg:w-80 flex"
             alt={`${profile?.fullName} profile picture`}
-            src={profile?.image}
+            src={image}
           />
         ) : (
           <div className=" shadow-2xl p-0 lg:p-9 w-full h-56 rounded-full flex flex-col items-center justify-center">

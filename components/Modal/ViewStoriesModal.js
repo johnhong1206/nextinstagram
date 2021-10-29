@@ -25,8 +25,6 @@ function ViewStoriesModal({ stories }) {
     dispatch(quitViewedStory());
     dispatch(closeviewStoriesModal());
   };
-  console.log(storyUserId);
-  console.log(stories);
 
   const viewStory = stories.filter((story) =>
     story.userId.includes(storyUserId)

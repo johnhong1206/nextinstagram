@@ -55,7 +55,7 @@ export default function Home({ usersList, photos, stories }) {
   useEffect(() => {
     if (!loading && user) {
       async function updateUserData() {
-        await dispatch(
+        dispatch(
           login({
             profileDocId: profileDocId,
             email: email,

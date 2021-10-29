@@ -62,28 +62,27 @@ function Profile({ bio, photos, savephotos }) {
     }
   }, [router.query.id]);
 
-  async function addVisitProfile() {
-    await dispatch(
-      addProfile({
-        profileDocId: userData?.userId,
-        profileUsername: userData?.username,
-        image: userData?.photoURL,
-        profileUserId: userData?.userId,
-        fullName: userData?.fullName,
-        photosCount: photoCollecction?.length,
-        followers: userData?.followers,
-        followersCount: userData?.followers?.length,
-        following: userData?.following,
-        followingCount: userData?.following?.length,
-        bios: userData?.bios,
-        email: userData?.email,
-        savePhoto: userData?.savePhoto,
-      })
-    );
-  }
-
   useEffect(() => {
-    addVisitProfile();
+    function addVisitProfile() {
+      dispatch(
+        addProfile({
+          profileDocId: userData?.userId,
+          profileUsername: userData?.username,
+          image: userData?.photoURL,
+          profileUserId: userData?.userId,
+          fullName: userData?.fullName,
+          photosCount: photoCollecction?.length,
+          followers: userData?.followers,
+          followersCount: userData?.followers?.length,
+          following: userData?.following,
+          followingCount: userData?.following?.length,
+          bios: userData?.bios,
+          email: userData?.email,
+          savePhoto: userData?.savePhoto,
+        })
+      );
+    }
+    return addVisitProfile();
   });
 
   const showBio = () => {

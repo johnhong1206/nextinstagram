@@ -174,7 +174,7 @@ function Header({ usersList }) {
                 {!!searchResults.length ? (
                   searchResults?.map(({ id, photoURL, username, email }) => (
                     <>
-                      <Link href={`/product/${id}`}>
+                      <Link href={`/profile/${id}`}>
                         <div className="flex items-center cursor-pointer px-1 py-4 hover:shadow-2xl">
                           <Image
                             className="rounded-full cursor-pointer"
@@ -201,7 +201,7 @@ function Header({ usersList }) {
                   <>
                     {searchTerm && (
                       <p className="text-xs text-gray-400 text-center py-2">
-                        No product found
+                        No users found
                       </p>
                     )}
                   </>
