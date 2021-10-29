@@ -43,7 +43,7 @@ function User({ username, fullName, image, uid }) {
         onClick={togglelogout}
         className="text-xs font-bold text-blue-400"
       >
-        Sign OUt
+        Sign Out
       </button>
     </div>
   );
