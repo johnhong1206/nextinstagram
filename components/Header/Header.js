@@ -51,7 +51,7 @@ function Header({ usersList }) {
 
   const handleSearch = (e) => {
     let trem = e.target.value;
-    trem = trem.toLowerCase();
+    trem = searchRef.current.value;
     setSearchTerm(trem);
     const filteredData = dataList?.filter((item) => {
       return Object.keys(item).some((key) =>
@@ -149,10 +149,10 @@ function Header({ usersList }) {
               <IoSearchOutline className="w-6 h-6 text-gray-500" />
             </div>
             <input
+              ref={searchRef}
               onMouseOver={() => setShowResults(true)}
               onBlur={() => setShowResults(false)}
               onFocus={() => setShowResults(true)}
-              value={searchTerm}
               onChange={handleSearch}
               type="text"
               placeholder="Search"

@@ -1,5 +1,7 @@
 import { useState, useRef } from "react";
-import AddComment from "./AddComment";
+import dynamic from "next/dynamic";
+const AddComment = dynamic(() => import("./AddComment"));
+
 import Link from "next/link";
 import { auth } from "../../config/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";

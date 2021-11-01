@@ -1,8 +1,9 @@
 import { useRef } from "react";
-import PostHeader from "./PostHeader";
-import PostAction from "./PostAction";
-import PostFooter from "./PostFooter";
-import PostComments from "./PostComments";
+import dynamic from "next/dynamic";
+const PostHeader = dynamic(() => import("./PostHeader"));
+const PostAction = dynamic(() => import("./PostAction"));
+const PostFooter = dynamic(() => import("./PostFooter"));
+const PostComments = dynamic(() => import("./PostComments"));
 
 function Posts({ content }) {
   const commentInput = useRef(null);

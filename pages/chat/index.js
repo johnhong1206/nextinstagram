@@ -1,13 +1,16 @@
-import { useEffect } from "react";
 import Head from "next/head";
+import dynamic from "next/dynamic";
 
 import { useCollection } from "react-firebase-hooks/firestore";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../features/userSlice";
-import Header from "../../components/Header/Header";
-import PersonChatllist from "../../components/Chat/PersonChatllist";
+const Header = dynamic(() => import("../../components/Header/Header"));
+const PersonChatllist = dynamic(() =>
+  import("../../components/Chat/PersonChatllist")
+);
+const MenuModal = dynamic(() => import("../../components/Modal/MenuModal"));
+
 import db from "../../config/firebase";
-import MenuModal from "../../components/Modal/MenuModal";
 import { selectMenuModalIsOpen } from "../../features/modalSlice";
 
 function Index() {

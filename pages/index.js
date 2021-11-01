@@ -1,9 +1,20 @@
 import { useEffect } from "react";
 import Head from "next/head";
+import dynamic from "next/dynamic";
 
 //components
-import Header from "../components/Header/Header";
-import Feeds from "../components/Feeds/Feeds";
+const Header = dynamic(() => import("../components/Header/Header"));
+const Feeds = dynamic(() => import("../components/Feeds/Feeds"));
+const PostStoriesModal = dynamic(() =>
+  import("../components/Modal/PostStoriesModal")
+);
+const ViewStoriesModal = dynamic(() =>
+  import("../components/Modal/ViewStoriesModal")
+);
+const MenuModal = dynamic(() => import("../components/Modal/MenuModal"));
+const PostImageModal = dynamic(() =>
+  import("../components/Modal/PostImageModal")
+);
 
 //config
 import db, { auth } from "../config/firebase";
@@ -19,12 +30,6 @@ import {
   selectPostStoriesModalIsOpen,
   selectViewStoriesModalIsOpen,
 } from "../features/modalSlice";
-import PostStoriesModal from "../components/Modal/PostStoriesModal";
-import ViewStoriesModal from "../components/Modal/ViewStoriesModal";
-import useStories from "../service/use-stories";
-import { addStories } from "../features/storiesSlice";
-import MenuModal from "../components/Modal/MenuModal";
-import PostImageModal from "../components/Modal/PostImageModal";
 
 export default function Home({ usersList, photos, stories }) {
   const [user] = useAuthState(auth);

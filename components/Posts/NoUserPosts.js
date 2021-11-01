@@ -1,6 +1,7 @@
 import React from "react";
-import NoUserPostHeader from "./NoUserPostHeader";
-import PostFooter from "./PostFooter";
+import dynamic from "next/dynamic";
+const NoUserPostHeader = dynamic(() => import("./NoUserPostHeader"));
+const PostFooter = dynamic(() => import("./PostFooter"));
 
 function NoUserPosts({ content }) {
   // console.log(content?.username);

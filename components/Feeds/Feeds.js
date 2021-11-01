@@ -1,13 +1,14 @@
 import React from "react";
+import dynamic from "next/dynamic";
+
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useDocument } from "react-firebase-hooks/firestore";
 import Skeleton from "react-loading-skeleton";
 import db, { auth } from "../../config/firebase";
-import Timeline from "./Timeline/Timeline";
-
-import Suggestion from "./Sidebar/Suggestion";
-import User from "./Sidebar/User";
-import Stories from "../Story/Stories";
+const Timeline = dynamic(() => import("./Timeline/Timeline"));
+const Suggestion = dynamic(() => import("./Sidebar/Suggestion"));
+const User = dynamic(() => import("./Sidebar/User"));
+const Stories = dynamic(() => import("../Story/Stories"));
 
 function Feeds({ noUserphotos, stories }) {
   const [user] = useAuthState(auth);

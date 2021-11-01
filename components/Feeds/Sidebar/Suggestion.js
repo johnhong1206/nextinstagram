@@ -1,7 +1,10 @@
 import { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
+
 import Skeleton from "react-loading-skeleton";
 //components
-import SuggestedProfile from "./SuggestedProfile";
+const SuggestedProfile = dynamic(() => import("./SuggestedProfile"));
+
 //services
 import { getSuggestedProfiles } from "../../../service/firebase";
 

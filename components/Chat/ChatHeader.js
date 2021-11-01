@@ -1,12 +1,6 @@
 import { useRouter } from "next/router";
 import Image from "next/image";
 
-import {
-  IoLogInOutline,
-  IoLogOutOutline,
-  IoHomeOutline,
-  IoChatboxOutline,
-} from "react-icons/io5";
 import db, { auth } from "../../config/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useDocument } from "react-firebase-hooks/firestore";
@@ -71,7 +65,7 @@ function ChatHeader({ chat }) {
             )}
           </div>
           <div>
-            <AiFillHome className="w-8 h-8" onClick={NavtoChatScreen} />
+            <AiFillHome className="w-8 h-8" onClick={navtoHome} />
           </div>
         </div>
       </div>

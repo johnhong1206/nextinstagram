@@ -1,5 +1,8 @@
-import Posts from "../../Posts/Posts";
-import NoLoginPost from "../../Posts/NoLoginPost";
+import dynamic from "next/dynamic";
+const Posts = dynamic(() => import("../../Posts/Posts"));
+const NoUserPosts = dynamic(() => import("../../Posts/NoUserPosts"));
+
+//import Posts from "../../Posts/Posts";
 import Skeleton from "react-loading-skeleton";
 
 //config
@@ -12,7 +15,6 @@ import useMyPhotos from "../../../service/use-myPhotos";
 import useNoUserphotos from "../../../service/use-NoUserphotos";
 import { useEffect, useState } from "react";
 import { getNoUserPhotos } from "../../../service/firebase";
-import NoUserPosts from "../../Posts/NoUserPosts";
 
 function Timeline({ noUserphotos }) {
   const [user] = useAuthState(auth);

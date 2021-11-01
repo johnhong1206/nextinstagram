@@ -13,6 +13,7 @@ import { isUserFollowingProfile, toggleFollow } from "../../service/firebase";
 import { useSelector, useDispatch } from "react-redux";
 import { selectProfile, selectUser } from "../../features/userSlice";
 
+import { openPostImageModal } from "../../features/modalSlice";
 import { MdModeEdit, MdUpdate } from "react-icons/md";
 import { BsFillImageFill } from "react-icons/bs";
 
@@ -267,7 +268,7 @@ function UserBio({ image, profileDocId, profileUserId, bios }) {
             )}
             {user && userId == profileDocId && (
               <AiOutlineInstagram
-                onClick={() => router.push("/imageupload")}
+                onClick={() => dispatch(openPostImageModal())}
                 className="w-7 h-7 lg:w-8 lg:h-8 hover:text-red-400  rounded-full cursor-pointer"
               />
             )}
