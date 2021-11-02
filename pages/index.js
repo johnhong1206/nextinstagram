@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import Head from "next/head";
 import dynamic from "next/dynamic";
+import Image from "next/image";
 
 //components
 const Header = dynamic(() => import("../components/Header/Header"));
@@ -36,8 +37,7 @@ export default function Home({ usersList, photos, stories }) {
   const userDataRef = db.collection("users").doc(user?.uid);
   const [userData, loading] = useDocument(userDataRef);
   const userId = user?.uid;
-  const following = userData?.data().following;
-  const newUserData = { userId, following };
+
   //const { stories } = useStories(newUserData);
 
   const openPostStoryModal = useSelector(selectPostStoriesModalIsOpen);

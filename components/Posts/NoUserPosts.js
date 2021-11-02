@@ -15,7 +15,7 @@ function NoUserPosts({ content }) {
         src={content.image}
         alt={content.caption}
         className="h-1/2"
-        quality="75"
+        quality="50"
       />
       <PostFooter caption={content.caption} username={content.username} />
     </div>

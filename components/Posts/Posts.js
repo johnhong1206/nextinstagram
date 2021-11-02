@@ -1,5 +1,7 @@
 import { useRef } from "react";
 import dynamic from "next/dynamic";
+import Image from "next/image";
+
 const PostHeader = dynamic(() => import("./PostHeader"));
 const PostAction = dynamic(() => import("./PostAction"));
 const PostFooter = dynamic(() => import("./PostFooter"));
@@ -16,11 +18,14 @@ function Posts({ content }) {
         userDocId={content?.userId}
         timestamp={content?.timestamp?.toDate().getTime()}
       />
-      <img
+      <Image
+        layout="responsive"
         src={content?.image}
         alt={content?.caption}
-        className="h-1/2"
-        quality="75"
+        height={480}
+        width={720}
+        quality="50"
+        className="object-contain"
       />
       <PostAction
         docId={content?.docId}

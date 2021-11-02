@@ -17,7 +17,7 @@ import { openPostImageModal } from "../../features/modalSlice";
 import { MdModeEdit, MdUpdate } from "react-icons/md";
 import { BsFillImageFill } from "react-icons/bs";
 
-function UserBio({ image, profileDocId, profileUserId, bios }) {
+function UserBio({ fullName, image, profileDocId, profileUserId, bios }) {
   const dispatch = useDispatch();
   const imgPickerRef = useRef(null);
   const authUser = useAuthState(auth);
@@ -314,11 +314,7 @@ function UserBio({ image, profileDocId, profileUserId, bios }) {
         </div>
         <div className="container mt-4 hidden lg:inline-flex">
           <p className="font-medium">
-            {!profile?.fullName ? (
-              <Skeleton count={1} height={24} />
-            ) : (
-              profile?.fullName
-            )}
+            {!fullName ? <Skeleton count={1} height={24} /> : fullName}
           </p>
         </div>
         <div className=" p-2 w-full h-auto">
