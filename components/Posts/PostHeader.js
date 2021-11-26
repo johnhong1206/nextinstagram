@@ -4,12 +4,34 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { useCollection, useDocument } from "react-firebase-hooks/firestore";
 import { BiDotsHorizontalRounded } from "react-icons/bi";
 import moment from "moment";
+import { useEffect, useState } from "react";
 
 function PostHeader({ username, userDocId, timestamp }) {
   const userRef = db.collection("users").doc(userDocId);
-  const [userData] = useDocument(userDocId && userRef);
-  const userImage = userData?.data().photoURL;
-  const userId = userData?.data().userId;
+  const [userData, setUserData] = useState([]);
+  const userImage = userData?.photoURL;
+  const userId = userData?.userId;
+
+  useEffect(() => {
+    let unsubscribe;
+
+    const fetchUserData = async () => {
+      unsubscribe = db
+        .collection("users")
+        .doc(userDocId)
+        .get()
+        .then((documentSnapshot) => {
+          if (!documentSnapshot.exists) {
+            console.log("nodata");
+          } else {
+            //console.log('User data: ', documentSnapshot.data());
+            setUserData(documentSnapshot.data());
+          }
+        });
+    };
+    fetchUserData();
+    return unsubscribe;
+  }, [db, userDocId]);
 
   return (
     <div className="flex items-baseline justify-between border-b border-gray-300 ">

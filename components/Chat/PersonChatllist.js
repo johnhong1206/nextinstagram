@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useCollection } from "react-firebase-hooks/firestore";
 import db, { auth } from "../../config/firebase";
@@ -9,14 +9,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { addChatlist, selectChatlist } from "../../features/userSlice";
 
 function PersonChatllist({ id, users, displayName }) {
-  const dispatch = useDispatch();
   const router = useRouter();
   const [user] = useAuthState(auth);
+  const [lastMessage, setLastMessage] = useState("");
+
   const [recipientSnapShot] = useCollection(
     db.collection("users").where("userId", "==", getRecipientUid(users, user))
   );
-
-  const peopleinChatlist = useSelector(selectChatlist);
 
   const recipient = recipientSnapShot?.docs?.[0]?.data();
 
@@ -24,11 +23,19 @@ function PersonChatllist({ id, users, displayName }) {
     router.push(`/chat/${id}`);
   };
 
-  const navProfile = () => {
-    router.push(`/profile/${recipient?.userId}`);
-  };
+  useEffect(() => {
+    const unsubscribe = db
+      .collection("chats")
+      .doc(id)
+      .collection("messages")
+      .orderBy("timestamp", "desc")
+      .onSnapshot((snapshot) =>
+        setLastMessage(snapshot.docs[0]?.data()?.message)
+      );
+    return unsubscribe;
+  }, [db, id]);
 
-  const recipientUid = getRecipientUid(users, user);
+  console.log(`${id} lastMessage`, lastMessage);
 
   return (
     <div className="container p-4 lg:p-0 col-span-3 lg:col-span-2">
@@ -50,6 +57,9 @@ function PersonChatllist({ id, users, displayName }) {
         <div>
           <p className=" uppercase font-medium text-base md:text-xl">
             {recipient?.username}
+          </p>
+          <p className="font-base text-gray-400 text-sm md:text-base">
+            {lastMessage || "Say Hi..."}
           </p>
         </div>
       </div>

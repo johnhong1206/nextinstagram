@@ -106,6 +106,18 @@ export async function updateFollowedUserFollowers(
     });
 }
 
+export async function getNouserPhotos() {
+  const result = await firebase.firestore().collection("photos").get();
+
+  console.log(result);
+
+  const photo = result.docs.map((item) => ({
+    ...item.data(),
+    docId: item.id,
+  }));
+  return photo;
+}
+
 export async function getPhotos(userId, following) {
   // [5,4,2] => following
   const result = await firebase

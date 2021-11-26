@@ -12,7 +12,7 @@ import {
   allStories,
   quitViewedStory,
 } from "../../features/storiesSlice";
-function ViewStoriesModal({ stories }) {
+function ViewStoriesModal() {
   const dispatch = useDispatch();
   const storyUserId = useSelector(viewStories);
   const [user] = useAuthState(auth);
@@ -20,16 +20,35 @@ function ViewStoriesModal({ stories }) {
   const [userData] = useDocument(user && userRef);
   const userId = user?.uid;
   const following = userData?.data().following;
+  const [stories, setStorires] = useState([]);
+
+  useEffect(() => {
+    let unsubscribe;
+
+    const fetchStories = () => {
+      unsubscribe = db
+        .collection("stories")
+        .where("userId", "==", storyUserId)
+        .onSnapshot((snapshot) => {
+          setStorires(
+            snapshot?.docs.map((doc) => ({
+              id: doc?.id,
+              ...doc?.data(),
+            }))
+          );
+        });
+    };
+
+    fetchStories();
+    return unsubscribe;
+  }, [db, storyUserId]);
 
   const quitView = () => {
     dispatch(quitViewedStory());
     dispatch(closeviewStoriesModal());
   };
 
-  const viewStory = stories.filter((story) =>
-    story.userId.includes(storyUserId)
-  );
-
+  console.log(stories);
   return (
     <div className="fixed z-50 inset-1 overflow-y-auto ">
       <div className="flex items-center justify-center w-full h-full bg-black bg-opacity-50">
@@ -42,10 +61,10 @@ function ViewStoriesModal({ stories }) {
             showThumbs={false}
             interval={10000}
           >
-            {viewStory.map((story) => (
+            {stories.map((story) => (
               <div key={story?.id} onClick={quitView}>
                 <img
-                  src={story?.images}
+                  src={story?.image}
                   className="w-[550px] h-[550px] object-contain"
                 />
               </div>

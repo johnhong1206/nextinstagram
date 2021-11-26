@@ -28,9 +28,9 @@ function Posts({ content }) {
         className="object-contain"
       />
       <PostAction
-        docId={content?.docId}
+        docId={content?.id}
         totalLikes={content?.likes?.length}
-        likedPhoto={content?.userLikedPhoto}
+        likedPhoto={content?.likes}
         save={content?.save}
         savedPhoto={content?.userSavedPhoto}
         handleFocus={handleFocus}

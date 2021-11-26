@@ -18,48 +18,7 @@ function FollowerUserList({
   profileId,
   loggedInUserDocId,
 }) {
-  const [followed, setFollowed] = useState(false);
-  const user = useSelector(selectUser);
-  const userId = user?.profileDocId;
-  const userdocId = userId;
-
-  const profileUserId = profileId;
-  const [isFollowingProfile, setIsFollowingProfile] = useState(null);
-
-  const handleToggleFollow = async () => {
-    setIsFollowingProfile((isFollowingProfile) => !isFollowingProfile);
-    const activeUserDocId = userdocId;
-    const followingUserId = userdocId;
-
-    await toggleFollow(
-      isFollowingProfile,
-      activeUserDocId,
-      profileDocId,
-      profileUserId,
-      followingUserId
-    );
-  };
-
-  useEffect(() => {
-    const isLoggedInUserFollowingProfile = async () => {
-      const isFollowing = await isUserFollowingProfile(username, profileUserId);
-      setIsFollowingProfile(!!isFollowing);
-    };
-
-    if (username && profileUserId) {
-      isLoggedInUserFollowingProfile();
-    }
-  }, [username, profileUserId]);
-
-  async function handleFollowUser() {
-    setFollowed(true);
-    await updateLoggedInUserFollowing(loggedInUserDocId, profileId, false);
-    await updateFollowedUserFollowers(profileDocId, userId, false);
-  }
-
-  if (userId === profileId) return false;
-
-  return !followed ? (
+  return (
     <div className="flex flex-row items-center align-items justify-between">
       <Link href={`/profile/${profileDocId}`}>
         <div className="flex items-center justify-between cursor-pointer">
@@ -77,7 +36,7 @@ function FollowerUserList({
         </div>
       </Link>
     </div>
-  ) : null;
+  );
 }
 
 export default FollowerUserList;

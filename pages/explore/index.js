@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Head from "next/head";
 
 import dynamic from "next/dynamic";
@@ -16,9 +16,33 @@ import { useSelector } from "react-redux";
 import { selectMenuModalIsOpen } from "../../features/modalSlice";
 
 function Index() {
-  const photoRef = db.collection("photos");
-  const [photoSnapshot, loading] = useCollection(photoRef);
+  const [photoSnapshot, setPhotoSnapshot] = useState([]);
+  const [loading, setLoading] = useState(true);
   const menuModal = useSelector(selectMenuModalIsOpen);
+
+  useEffect(() => {
+    let unsubscribe;
+    const fetchPhotos = () => {
+      unsubscribe = db.collection("photos").onSnapshot((snapshot) => {
+        setPhotoSnapshot(
+          snapshot?.docs.slice(0, 2).map((doc) => ({
+            id: doc?.id,
+            ...doc?.data(),
+          }))
+        );
+      });
+    };
+    fetchPhotos();
+    return unsubscribe;
+  }, [db]);
+
+  useEffect(() => {
+    if (photoSnapshot) {
+      setLoading(false);
+    } else {
+      setLoading(true);
+    }
+  }, photoSnapshot);
 
   return (
     <div>
@@ -32,59 +56,59 @@ function Index() {
         {!loading ? (
           <div className="px-5 my-10 grid grid-flow-row-dense gap-1 grid-cols-1 md:grid-cols-2 lg:grid-cols-2">
             <div className="grid grid-flow-row-dense grid-cols-1 gap-1 md:grid-cols-2">
-              {photoSnapshot?.docs.slice(0, 4).map((content) => (
+              {photoSnapshot?.slice(0, 4).map((content) => (
                 <ExplorePost
                   key={content?.id}
                   id={content?.id}
-                  content={content.data()}
+                  content={content}
                   loading={loading}
                 />
               ))}
             </div>
-            {photoSnapshot?.docs.slice(4, 5).map((content) => (
+            {photoSnapshot?.slice(4, 5).map((content) => (
               <ExplorePost
                 key={content?.id}
                 id={content?.id}
-                content={content.data()}
+                content={content}
                 loading={loading}
               />
             ))}
             <div className="grid grid-flow-row-dense grid-cols-1 gap-1 md:grid-cols-4 col-span-2">
-              {photoSnapshot?.docs.slice(5, 9).map((content) => (
+              {photoSnapshot?.slice(5, 9).map((content) => (
                 <ExplorePost
                   key={content?.id}
                   id={content?.id}
-                  content={content.data()}
+                  content={content}
                   loading={loading}
                 />
               ))}
             </div>
             <div className="grid grid-flow-row-dense grid-cols-1 gap-1 md:grid-cols-4 col-span-2">
-              {photoSnapshot?.docs.slice(9, 12).map((content) => (
+              {photoSnapshot?.slice(9, 12).map((content) => (
                 <ExplorePost
                   key={content?.id}
                   id={content?.id}
-                  content={content.data()}
+                  content={content}
                   loading={loading}
                 />
               ))}
             </div>
-            {photoSnapshot?.docs.slice(12, 13).map((content) => (
+            {photoSnapshot?.slice(12, 13).map((content) => (
               <ExplorePost
                 key={content?.id}
                 id={content?.id}
-                content={content.data()}
+                content={content}
                 loading={loading}
               />
             ))}
             <div className="grid grid-flow-row-dense grid-cols-1 gap-1 md:grid-cols-2">
-              {photoSnapshot?.docs
-                .slice(13, photoSnapshot.length - 1)
+              {photoSnapshot
+                ?.slice(13, photoSnapshot.length - 1)
                 .map((content) => (
                   <ExplorePost
                     key={content?.id}
                     id={content?.id}
-                    content={content.data()}
+                    content={content}
                     loading={loading}
                   />
                 ))}

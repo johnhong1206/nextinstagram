@@ -41,7 +41,10 @@ function ChatHeader({ chat }) {
       <div className=" container mx-auto max-w-screen-lg h-full">
         <div className="flex items-center justify-between h-full px-3">
           <div>
-            <AiOutlineArrowLeft className="w-8 h-8" onClick={NavtoChatScreen} />
+            <AiOutlineArrowLeft
+              className="w-8 h-8 cursor-pointer"
+              onClick={NavtoChatScreen}
+            />
           </div>
           <div className=" text-gray-700 text-center flex items-center cursor-pointer align-items">
             {recipient ? (
@@ -65,7 +68,10 @@ function ChatHeader({ chat }) {
             )}
           </div>
           <div>
-            <AiFillHome className="w-8 h-8" onClick={navtoHome} />
+            <AiFillHome
+              className="w-8 h-8 cursor-pointer"
+              onClick={navtoHome}
+            />
           </div>
         </div>
       </div>

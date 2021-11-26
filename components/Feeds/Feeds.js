@@ -10,7 +10,7 @@ const Suggestion = dynamic(() => import("./Sidebar/Suggestion"));
 const User = dynamic(() => import("./Sidebar/User"));
 const Stories = dynamic(() => import("../Story/Stories"));
 
-function Feeds({ noUserphotos, stories }) {
+function Feeds({ noUserphotos, stories, photo }) {
   const [user] = useAuthState(auth);
   const [userData, loading] = useDocument(
     user && db.collection("users").doc(user?.uid)
@@ -22,7 +22,7 @@ function Feeds({ noUserphotos, stories }) {
     <div className="grid grid-cols-1 md:grid-cols-2 md:max-w-3xl xl:grid-cols-3 xl:max-w-6xl mx-auto">
       <section className="col-span-2">
         {user && <Stories stories={stories} />}
-        <Timeline noUserphotos={noUserphotos} />
+        <Timeline photo={photo} />
       </section>
       <section className="hidden xl:inline-grid md:col-span-1">
         <div className="fixed top-20">

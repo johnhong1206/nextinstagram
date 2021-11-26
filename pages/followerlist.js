@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import Head from "next/head";
 
@@ -21,10 +21,27 @@ function Followerlist() {
   const menuModal = useSelector(selectMenuModalIsOpen);
 
   const [user] = useAuthState(auth);
-  const [userData, loading] = useDocument(
-    user && db.collection("users").doc(user?.uid)
-  );
-  if (loading) return <Skeleton count={1} height={61} />;
+  const [userData, setUserData] = useState([]);
+
+  useEffect(() => {
+    let unsubscribe;
+    const fetchUserData = () => {
+      if (user) {
+        db.collection("users")
+          .doc(user?.uid)
+          .get()
+          .then((documentSnapshot) => {
+            if (!documentSnapshot.exists) {
+            } else {
+              //console.log('User data: ', documentSnapshot.data());
+              setUserData(documentSnapshot.data());
+            }
+          });
+      }
+    };
+    fetchUserData();
+    return unsubscribe;
+  }, [db, user]);
 
   return (
     <div>
@@ -37,23 +54,23 @@ function Followerlist() {
       <div className="grid px-8">
         <div>
           <User
-            username={userData?.data().username}
-            fullName={userData?.data().fullName}
-            image={userData?.data().photoURL}
-            uid={userData?.data().userId}
+            username={userData?.username}
+            fullName={userData?.fullName}
+            image={userData?.photoURL}
+            uid={userData?.userId}
           />
           <Suggestion
-            userId={userData?.data().userId}
-            following={userData?.data().following}
+            userId={userData?.userId}
+            following={userData?.following}
             loggedInUserDocId={userData?.id}
           />
           <div className="mt-10 border-gray-300 border-t-2 py-4">
             <Follower
-              username={userData?.data().username}
-              userId={userData?.data().userId}
-              follower={userData?.data().follower}
+              username={userData?.username}
+              userId={userData?.userId}
+              follower={userData?.follower}
               loggedInUserDocId={userData?.id}
-              following={userData?.data().following}
+              following={userData?.following}
             />
           </div>
         </div>

@@ -1,26 +1,18 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Head from "next/head";
 import dynamic from "next/dynamic";
-import Image from "next/image";
 
 //components
 const Header = dynamic(() => import("../components/Header/Header"));
 const Feeds = dynamic(() => import("../components/Feeds/Feeds"));
-const PostStoriesModal = dynamic(() =>
-  import("../components/Modal/PostStoriesModal")
-);
 const ViewStoriesModal = dynamic(() =>
   import("../components/Modal/ViewStoriesModal")
 );
 const MenuModal = dynamic(() => import("../components/Modal/MenuModal"));
-const PostImageModal = dynamic(() =>
-  import("../components/Modal/PostImageModal")
-);
 
 //config
 import db, { auth } from "../config/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { useDocument, useCollectionOnce } from "react-firebase-hooks/firestore";
 
 //redux
 import { useDispatch, useSelector } from "react-redux";
@@ -32,10 +24,14 @@ import {
   selectViewStoriesModalIsOpen,
 } from "../features/modalSlice";
 
-export default function Home({ usersList, photos, stories }) {
+export default function Home({ usersList, stories }) {
   const [user] = useAuthState(auth);
-  const userDataRef = db.collection("users").doc(user?.uid);
-  const [userData, loading] = useDocument(userDataRef);
+  //const userDataRef = db.collection("users").doc(user?.uid);
+  //const [userData, loading] = useDocument(userDataRef);
+  const [userData, setUserData] = useState([]);
+  const [photo, setPhoto] = useState([]);
+  const [myPhtoto, setMyphoto] = useState([]);
+
   const userId = user?.uid;
 
   //const { stories } = useStories(newUserData);
@@ -48,36 +44,98 @@ export default function Home({ usersList, photos, stories }) {
   //const [snapshot] = useCollectionOnce(db.collection("users"));
   const dispatch = useDispatch();
 
-  const email = userData?.data().email;
-  const profileUsernam = userData?.data().username;
-  const profileDocId = userData?.data().userId;
-  const image = userData?.data().photoURL;
-  const profileUserId = userData?.data().userId;
-  const fullName = userData?.data().fullName;
+  const following = userData?.following;
 
-  //console.log(stories);
+  const [allphotos, setAllPhotos] = useState([]);
 
   useEffect(() => {
-    if (!loading && user) {
-      async function updateUserData() {
-        dispatch(
-          login({
-            profileDocId: profileDocId,
-            email: email,
-            profileUsername: profileUsernam,
-            image: image,
-            profileUserId: profileUserId,
-            fullName: fullName,
-          })
-        );
-      }
-      updateUserData();
-    }
-  }, [loading, user]);
+    db.collection("users")
+      .doc(user?.uid)
+      .get()
+      .then((documentSnapshot) => {
+        if (!documentSnapshot.exists) {
+        } else {
+          //console.log('User data: ', documentSnapshot.data());
+          setUserData(documentSnapshot.data());
+        }
+      });
+  }, [db, user]);
 
   useEffect(() => {
     dispatch(addUserList(JSON.parse(usersList)));
   }, []);
+
+  useEffect(() => {
+    let unsubscribe;
+
+    const fetchPhotos = () => {
+      if (user) {
+        const followingUsers = following?.length > 0 ? following : ["test"];
+        const allphoto = [];
+
+        unsubscribe = db
+          .collection("photos")
+          .where("userId", "in", [...followingUsers])
+          .onSnapshot((snapshot) => {
+            setPhoto(
+              snapshot?.docs.map((doc) => ({
+                id: doc?.id,
+                ...doc?.data(),
+              }))
+            );
+          });
+      } else {
+        unsubscribe = db.collection("photos").onSnapshot((snapshot) => {
+          setPhoto(
+            snapshot?.docs.slice(0, 2).map((doc) => ({
+              id: doc?.id,
+              ...doc?.data(),
+            }))
+          );
+        });
+      }
+    };
+    fetchPhotos();
+    return unsubscribe;
+  }, [db, following, user]);
+
+  useEffect(() => {
+    let unsubscribe;
+
+    const fetchMyPhotos = () => {
+      if (user) {
+        unsubscribe = db
+          .collection("photos")
+          .where("userId", "==", user?.uid)
+          .onSnapshot((snapshot) => {
+            setMyphoto(
+              snapshot?.docs.map((doc) => ({
+                id: doc?.id,
+                ...doc?.data(),
+              }))
+            );
+          });
+      } else {
+        setMyphoto([]);
+      }
+    };
+    fetchMyPhotos();
+    return unsubscribe;
+  }, [db, user]);
+
+  useEffect(() => {
+    let unsubscribe;
+    const joinPhotos = () => {
+      let allphoto = [];
+      allphoto.push(
+        ...myPhtoto.sort((a, b) => b.timestamp - a.timestamp),
+        ...photo.sort((a, b) => b.timestamp - a.timestamp)
+      );
+      setAllPhotos(allphoto);
+    };
+    joinPhotos();
+    return unsubscribe;
+  }, [myPhtoto, photo]);
 
   return (
     <div className="bg-gray-50 h-screen overflow-y-scroll scrollbar-hide">
@@ -87,21 +145,16 @@ export default function Home({ usersList, photos, stories }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header usersList={JSON.parse(usersList)} />
-      <Feeds stories={JSON.parse(stories)} noUserphotos={JSON.parse(photos)} />
-      {openPostStoryModal && <PostStoriesModal />}
-      {openViewStoriesModal && (
-        <ViewStoriesModal stories={JSON.parse(stories)} />
-      )}
+      <Feeds photo={allphotos} />
+
+      {openViewStoriesModal && <ViewStoriesModal />}
       {menuModal && <MenuModal />}
-      {postImageModal && <PostImageModal />}
     </div>
   );
 }
 
 export async function getServerSideProps(context) {
   const ref = db.collection("users");
-  const photoRef = db.collection("photos");
-  const storyRef = db.collection("stories");
 
   const usersRes = await ref.get();
   const users = usersRes.docs.map((user) => ({
@@ -109,23 +162,9 @@ export async function getServerSideProps(context) {
     ...user.data(),
   }));
 
-  const photoRes = await photoRef.get();
-  const photos = photoRes.docs.map((photo) => ({
-    id: photo.id,
-    ...photo.data(),
-  }));
-
-  const storiesRes = await storyRef.get();
-  const stories = storiesRes.docs.map((story) => ({
-    id: story.id,
-    ...story.data(),
-  }));
-
   return {
     props: {
       usersList: JSON.stringify(users),
-      photos: JSON.stringify(photos),
-      stories: JSON.stringify(stories),
     },
   };
 }

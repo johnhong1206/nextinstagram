@@ -62,25 +62,6 @@ function Header({ usersList }) {
     });
     setSearchResults(filteredData);
   };
-  {
-    /*const filterData = (value) => {
-    const Value = value.toLocaleUpperCase().trim();
-
-    if (Value === "") setSearchResults(dataList);
-    else {
-      const filteredData = dataList.filter((item) => {
-        return Object.keys(item).some((key) =>
-          excludeColumns.includes(key)
-            ? false
-            : item[key].toString().toLocaleUpperCase().includes(searchTerm)
-        );
-      });
-      console.log("filteredData", filteredData);
-      setSearchResults(filteredData);
-    }
-  };
-*/
-  }
 
   const navtoHome = (e) => {
     router.push("/");
@@ -88,6 +69,10 @@ function Header({ usersList }) {
 
   const navtoLogin = (e) => {
     router.push("/login");
+  };
+
+  const navPostImg = (e) => {
+    router.push("/imageupload");
   };
 
   const navtoReginter = (e) => {
@@ -218,7 +203,7 @@ function Header({ usersList }) {
                     className="w-6 h-6 inputIcon"
                   />
                   <IoAddCircleOutline
-                    onClick={() => dispatch(openPostImageModal())}
+                    onClick={navPostImg}
                     className="w-6 h-6"
                   />
                   <IoLogOutOutline

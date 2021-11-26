@@ -1,23 +1,27 @@
 import { useState, useEffect } from "react";
 import Skeleton from "react-loading-skeleton";
+
 //components
-import SuggestedProfile from "../Feeds/Sidebar/SuggestedProfile";
 //services
-import { getSuggestedProfiles, getfollower } from "../../service/firebase";
 import FollowerUserList from "./FollowerUserList";
+import db from "../../config/firebase";
 
 function Follower({ username, userId, following, loggedInUserDocId }) {
   const [profiles, setProfiles] = useState(null);
 
   useEffect(() => {
-    async function suggestedProfiles() {
-      const response = await getfollower(userId, following);
-      setProfiles(response);
-    }
+    const followingUsers = following?.length > 0 ? following : ["test"];
 
-    if (userId) {
-      suggestedProfiles();
-    }
+    db.collection("users")
+      .where("userId", "in", [...followingUsers])
+      .onSnapshot((snapshot) => {
+        setProfiles(
+          snapshot?.docs.map((doc) => ({
+            id: doc?.id,
+            ...doc?.data(),
+          }))
+        );
+      });
   }, [userId]);
 
   return !profiles ? (
@@ -30,8 +34,8 @@ function Follower({ username, userId, following, loggedInUserDocId }) {
       <div className="mt-4 grid gap-5">
         {profiles.map((profile) => (
           <FollowerUserList
-            key={profile.docId}
-            profileDocId={profile.docId}
+            key={profile.id}
+            profileDocId={profile.id}
             username={profile.username}
             profileId={profile.userId}
             image={profile.photoURL}
@@ -45,3 +49,6 @@ function Follower({ username, userId, following, loggedInUserDocId }) {
 }
 
 export default Follower;
+{
+  /** */
+}

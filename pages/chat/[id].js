@@ -13,9 +13,12 @@ import { useCollection, useDocument } from "react-firebase-hooks/firestore";
 
 import { useSelector } from "react-redux";
 import { selectUser } from "../../features/userSlice";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 function ChatScreen({ chat, messages }) {
-  const user = useSelector(selectUser);
+  const [user] = useAuthState(auth);
+  const [userData, setUserData] = useState([]);
+
   const router = useRouter();
   const endofMessageRef = useRef(null);
   const scrollToBottom = () => {
@@ -24,6 +27,18 @@ function ChatScreen({ chat, messages }) {
       block: "start",
     });
   };
+
+  useEffect(() => {
+    let unsubscribe;
+    const fetchUserData = () => {
+      unsubscribe = db
+        .collection("users")
+        .doc(user?.uid)
+        .onSnapshot((snapshot) => setUserData(snapshot.data()));
+    };
+    fetchUserData();
+    return unsubscribe;
+  }, [db, user]);
 
   const [input, setInput] = useState("");
   const [messagesSnapshot] = useCollection(
@@ -60,10 +75,10 @@ function ChatScreen({ chat, messages }) {
     db.collection("chats").doc(router.query.id).collection("messages").add({
       timestamp: firebase.firestore.FieldValue.serverTimestamp(),
       message: input,
-      user: user?.email,
-      displayName: user?.profileUsername,
-      photoURL: user?.image,
-      userId: user?.profileDocId,
+      user: userData?.email,
+      displayName: userData?.username,
+      photoURL: userData?.photoURL,
+      userId: userData?.userId,
     });
 
     setInput("");

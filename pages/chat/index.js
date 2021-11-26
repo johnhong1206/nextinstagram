@@ -1,27 +1,44 @@
 import Head from "next/head";
 import dynamic from "next/dynamic";
+import { useEffect, useState } from "react";
 
-import { useCollection } from "react-firebase-hooks/firestore";
 import { useSelector } from "react-redux";
-import { selectUser } from "../../features/userSlice";
 const Header = dynamic(() => import("../../components/Header/Header"));
 const PersonChatllist = dynamic(() =>
   import("../../components/Chat/PersonChatllist")
 );
 const MenuModal = dynamic(() => import("../../components/Modal/MenuModal"));
 
-import db from "../../config/firebase";
+import db, { auth } from "../../config/firebase";
 import { selectMenuModalIsOpen } from "../../features/modalSlice";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 function Index() {
   const menuModal = useSelector(selectMenuModalIsOpen);
 
-  const user = useSelector(selectUser);
-  const userChatRef = db
-    .collection("chats")
-    .where("users", "array-contains", user?.profileDocId);
-  const [chatSnapshot] = useCollection(userChatRef);
+  const [user] = useAuthState(auth);
+  const [chatSnapshot, setChatSnapshot] = useState([]);
 
+  useEffect(() => {
+    let unsubscribe;
+    const fetchChat = () => {
+      unsubscribe = db
+        .collection("chats")
+        .where("users", "array-contains", user?.uid)
+        .onSnapshot((snapshot) =>
+          setChatSnapshot(
+            snapshot?.docs.map((doc) => ({
+              id: doc?.id,
+              ...doc?.data(),
+            }))
+          )
+        );
+    };
+    fetchChat();
+    return unsubscribe;
+  }, [db, user]);
+
+  console.log(chatSnapshot);
   return (
     <div className="">
       <Head>
@@ -33,12 +50,12 @@ function Index() {
       <main className="max-w-screen mx-auto">
         <div className="flex p-10">
           <div className="flex flex-col flex-grow w-2/3">
-            {chatSnapshot?.docs.map((chat) => (
+            {chatSnapshot?.map((chat) => (
               <PersonChatllist
                 key={chat.id}
                 id={chat.id}
-                users={chat.data().users}
-                displayName={chat.data().displayName}
+                users={chat?.users}
+                displayName={chat?.displayName}
               />
             ))}
           </div>

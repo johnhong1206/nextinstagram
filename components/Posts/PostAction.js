@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { BsChatDots } from "react-icons/bs";
 import { IoBookmark, IoBookmarkOutline } from "react-icons/io5";
@@ -18,30 +18,38 @@ function PostAction({
 }) {
   const [user] = useAuthState(auth);
   const userId = user?.uid;
-  const [toggleLiked, setToggleLiked] = useState(likedPhoto);
+  const [toggleLiked, setToggleLiked] = useState(false);
   const [likes, setLikes] = useState(totalLikes);
   const [toggleSaved, setToggleSaved] = useState(savedPhoto);
+  const [photoLikeSave, setPhotoLikeSave] = useState();
+
+  useEffect(() => {
+    db.collection("photos")
+      .doc(docId)
+      .onSnapshot((snapshot) => setPhotoLikeSave(snapshot.data()));
+  }, [db, user]);
+
+  const likesss = photoLikeSave?.likes?.includes(user?.uid);
+  const savesssss = photoLikeSave?.save?.includes(user?.uid);
 
   const handleToggleLiked = async () => {
-    setToggleLiked((toggleLiked) => !toggleLiked);
     await db
       .collection("photos")
       .doc(docId)
       .update({
-        likes: toggleLiked
+        likes: likesss
           ? firebase.firestore.FieldValue.arrayRemove(userId)
           : firebase.firestore.FieldValue.arrayUnion(userId),
       });
-    setLikes((likes) => (toggleLiked ? likes - 1 : likes + 1));
+    setLikes((likes) => (likesss ? likes - 1 : likes + 1));
   };
 
   const handleToggleSave = async () => {
-    setToggleSaved((toggleSaved) => !toggleSaved);
     await db
       .collection("photos")
       .doc(docId)
       .update({
-        save: toggleSaved
+        save: savesssss
           ? firebase.firestore.FieldValue.arrayRemove(userId)
           : firebase.firestore.FieldValue.arrayUnion(userId),
       });
@@ -50,9 +58,9 @@ function PostAction({
       .collection("users")
       .doc(userId)
       .update({
-        savePhoto: toggleSaved
-          ? firebase.firestore.FieldValue.arrayRemove(content)
-          : firebase.firestore.FieldValue.arrayUnion(content),
+        savePhoto: savesssss
+          ? firebase.firestore.FieldValue.arrayRemove(docId)
+          : firebase.firestore.FieldValue.arrayUnion(docId),
       });
   };
 
@@ -61,7 +69,7 @@ function PostAction({
       <div className=" flex justify-between p-4">
         {user && (
           <div className="flex item-center justify-center space-x-4">
-            {!toggleLiked && (
+            {!likesss && (
               <AiOutlineHeart
                 onClick={handleToggleLiked}
                 onKeyDown={(event) => {
@@ -70,11 +78,11 @@ function PostAction({
                   }
                 }}
                 className={`w-8 h-8 select-none cursor-pointer focus:outline-none ${
-                  toggleLiked ? "text-red-400" : "text-black-light"
+                  likesss ? "text-red-400" : "text-black-light"
                 }`}
               />
             )}
-            {toggleLiked && (
+            {likesss && (
               <AiFillHeart
                 onClick={handleToggleLiked}
                 onKeyDown={(event) => {
@@ -83,7 +91,7 @@ function PostAction({
                   }
                 }}
                 className={`w-8 h-8 select-none cursor-pointer focus:outline-none ${
-                  toggleLiked ? "text-red-400" : "text-black-light"
+                  likesss ? "text-red-400" : "text-black-light"
                 }`}
               />
             )}
@@ -97,7 +105,7 @@ function PostAction({
                 }
               }}
             />
-            {toggleSaved && (
+            {savesssss && (
               <IoBookmark
                 onClick={handleToggleSave}
                 onKeyDown={(event) => {
@@ -106,11 +114,11 @@ function PostAction({
                   }
                 }}
                 className={`w-8 h-8 select-none cursor-pointer focus:outline-none ${
-                  toggleSaved ? "text-blue-400" : "text-black-light"
+                  savesssss ? "text-blue-400" : "text-black-light"
                 }`}
               />
             )}
-            {!toggleSaved && (
+            {!savesssss && (
               <IoBookmarkOutline
                 onClick={handleToggleSave}
                 onKeyDown={(event) => {
@@ -119,7 +127,7 @@ function PostAction({
                   }
                 }}
                 className={`w-8 h-8 select-none cursor-pointer focus:outline-none ${
-                  toggleSaved ? "text-blue-400" : "text-black-light"
+                  savesssss ? "text-blue-400" : "text-black-light"
                 }`}
               />
             )}
