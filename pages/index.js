@@ -30,6 +30,7 @@ export default function Home({ usersList, stories }) {
   //const [userData, loading] = useDocument(userDataRef);
   const [userData, setUserData] = useState([]);
   const [photo, setPhoto] = useState([]);
+  const [nouserPhoto, setNouserPhoto] = useState([]);
   const [myPhtoto, setMyphoto] = useState([]);
 
   const userId = user?.uid;
@@ -71,8 +72,6 @@ export default function Home({ usersList, stories }) {
     const fetchPhotos = () => {
       if (user) {
         const followingUsers = following?.length > 0 ? following : ["test"];
-        const allphoto = [];
-
         unsubscribe = db
           .collection("photos")
           .where("userId", "in", [...followingUsers])
@@ -84,15 +83,6 @@ export default function Home({ usersList, stories }) {
               }))
             );
           });
-      } else {
-        unsubscribe = db.collection("photos").onSnapshot((snapshot) => {
-          setPhoto(
-            snapshot?.docs.slice(0, 2).map((doc) => ({
-              id: doc?.id,
-              ...doc?.data(),
-            }))
-          );
-        });
       }
     };
     fetchPhotos();
@@ -101,7 +91,6 @@ export default function Home({ usersList, stories }) {
 
   useEffect(() => {
     let unsubscribe;
-
     const fetchMyPhotos = () => {
       if (user) {
         unsubscribe = db
@@ -125,11 +114,35 @@ export default function Home({ usersList, stories }) {
 
   useEffect(() => {
     let unsubscribe;
+
+    const fetchPhotos = () => {
+      if (!user) {
+        db.collection("photos").onSnapshot((snapshot) => {
+          setNouserPhoto(
+            snapshot?.docs.slice(0, 2).map((doc) => ({
+              id: doc?.id,
+              ...doc?.data(),
+            }))
+          );
+        });
+      } else {
+        setNouserPhoto([]);
+      }
+    };
+    fetchPhotos();
+    return unsubscribe;
+  }, [db, user]);
+
+  console.log("no user photo", nouserPhoto);
+
+  useEffect(() => {
+    let unsubscribe;
     const joinPhotos = () => {
       let allphoto = [];
       allphoto.push(
         ...myPhtoto.sort((a, b) => b.timestamp - a.timestamp),
-        ...photo.sort((a, b) => b.timestamp - a.timestamp)
+        ...photo.sort((a, b) => b.timestamp - a.timestamp),
+        ...nouserPhoto
       );
       setAllPhotos(allphoto);
     };
