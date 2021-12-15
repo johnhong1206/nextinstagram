@@ -18,7 +18,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { openMenuModal } from "../../features/modalSlice";
 import useAuth from "../../hooks/useAuth";
 
-function Header({ usersList }) {
+function Header({ usersList, userData }) {
   const router = useRouter();
   const dispatch = useDispatch();
   const all_Users = useSelector(selectUserList);
@@ -97,10 +97,6 @@ function Header({ usersList }) {
   };
 
   const toggleSection = () => {
-    dispatch(openMenuModal());
-  };
-
-  const togglePostImageModal = () => {
     dispatch(openMenuModal());
   };
 
@@ -213,7 +209,7 @@ function Header({ usersList }) {
                     <Image
                       className="rounded-full cursor-pointer inputIcon"
                       src={
-                        user?.photoURL ||
+                        userData?.photoURL ||
                         "https://thumbs.dreamstime.com/b/no-image-available-icon-flat-vector-no-image-available-icon-flat-vector-illustration-132482953.jpg"
                       }
                       width="40"
