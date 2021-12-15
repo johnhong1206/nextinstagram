@@ -55,7 +55,7 @@ export default function Home({ usersList }) {
 
     const fetchPhotos = () => {
       if (user) {
-        const followingUsers = following?.length > 0 ? following : ["test"];
+        const followingUsers = following?.length > 0 ? following : ["no data"];
         unsubscribe = db
           .collection("photos")
           .where("userId", "in", [...followingUsers])
@@ -67,11 +67,20 @@ export default function Home({ usersList }) {
               }))
             );
           });
+      } else {
+        db.collection("photos").onSnapshot((snapshot) => {
+          setNouserPhoto(
+            snapshot?.docs.slice(0, 2).map((doc) => ({
+              id: doc?.id,
+              ...doc?.data(),
+            }))
+          );
+        });
       }
     };
     fetchPhotos();
     return unsubscribe;
-  }, [db, following, user, userData]);
+  }, [db, following, user]);
 
   useEffect(() => {
     let unsubscribe;
@@ -93,27 +102,6 @@ export default function Home({ usersList }) {
       }
     };
     fetchMyPhotos();
-    return unsubscribe;
-  }, [db, user]);
-
-  useEffect(() => {
-    let unsubscribe;
-
-    const fetchPhotos = () => {
-      if (!user) {
-        db.collection("photos").onSnapshot((snapshot) => {
-          setNouserPhoto(
-            snapshot?.docs.slice(0, 2).map((doc) => ({
-              id: doc?.id,
-              ...doc?.data(),
-            }))
-          );
-        });
-      } else {
-        setNouserPhoto([]);
-      }
-    };
-    fetchPhotos();
     return unsubscribe;
   }, [db, user]);
 
@@ -141,7 +129,7 @@ export default function Home({ usersList }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header usersList={JSON.parse(usersList)} />
-      <Feeds photo={user ? allphotos : nouserPhoto} userData={userData} />
+      <Feeds photo={!user ? nouserPhoto : allphotos} userData={userData} />
 
       {openViewStoriesModal && <ViewStoriesModal />}
       {menuModal && <MenuModal />}
