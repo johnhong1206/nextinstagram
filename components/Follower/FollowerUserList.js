@@ -1,23 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useSelector, useDispatch } from "react-redux";
 
-import {
-  updateLoggedInUserFollowing,
-  updateFollowedUserFollowers,
-  toggleFollow,
-  isUserFollowingProfile,
-} from "../../service/firebase";
-import { selectUser } from "../../features/userSlice";
-
-function FollowerUserList({
-  profileDocId,
-  username,
-  image,
-  profileId,
-  loggedInUserDocId,
-}) {
+function FollowerUserList({ profileDocId, username, image }) {
   return (
     <div className="flex flex-row items-center align-items justify-between">
       <Link href={`/profile/${profileDocId}`}>

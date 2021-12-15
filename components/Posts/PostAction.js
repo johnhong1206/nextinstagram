@@ -2,25 +2,15 @@ import { useState, useContext, useEffect } from "react";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { BsChatDots } from "react-icons/bs";
 import { IoBookmark, IoBookmarkOutline } from "react-icons/io5";
-import db, { auth } from "../../config/firebase";
-import { useAuthState } from "react-firebase-hooks/auth";
+import db from "../../config/firebase";
 
 import firebase from "firebase";
+import useAuth from "../../hooks/useAuth";
 
-function PostAction({
-  docId,
-  totalLikes,
-  likedPhoto,
-  save,
-  handleFocus,
-  content,
-  savedPhoto,
-}) {
-  const [user] = useAuthState(auth);
+function PostAction({ docId, totalLikes, handleFocus }) {
+  const { user } = useAuth();
   const userId = user?.uid;
-  const [toggleLiked, setToggleLiked] = useState(false);
   const [likes, setLikes] = useState(totalLikes);
-  const [toggleSaved, setToggleSaved] = useState(savedPhoto);
   const [photoLikeSave, setPhotoLikeSave] = useState();
 
   useEffect(() => {

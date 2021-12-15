@@ -54,7 +54,10 @@ function MenuContent() {
 
   const handleAuthentication = () => {
     if (user) {
-      auth.signOut();
+      auth.signOut().then(() => {
+        router.replace("/");
+        router.reload();
+      });
       dispatch(logout());
       dispatch(closemenuModal());
     }

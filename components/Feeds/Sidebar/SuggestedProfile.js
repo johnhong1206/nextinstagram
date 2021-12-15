@@ -6,6 +6,8 @@ import {
   updateLoggedInUserFollowing,
   updateFollowedUserFollowers,
 } from "../../../service/firebase";
+import useAuth from "../../../hooks/useAuth";
+import { useRouter } from "next/router";
 
 function SuggestedProfile({
   profileDocId,
@@ -13,14 +15,21 @@ function SuggestedProfile({
   image,
   profileId,
   userId,
-  loggedInUserDocId,
 }) {
   const [followed, setFollowed] = useState(false);
-  async function handleFollowUser() {
-    setFollowed(true);
-    await updateLoggedInUserFollowing(loggedInUserDocId, profileId, false);
-    await updateFollowedUserFollowers(profileDocId, userId, false);
-  }
+  const { user } = useAuth();
+  const router = useRouter();
+
+  const togglefollowing = async () => {
+    async function handleFollowUser() {
+      setFollowed(true);
+      await updateLoggedInUserFollowing(userId, profileId, false);
+      await updateFollowedUserFollowers(profileDocId, userId, false);
+    }
+    handleFollowUser().then(() => {
+      router.reload();
+    });
+  };
 
   if (userId === profileId) return false;
 
@@ -44,7 +53,7 @@ function SuggestedProfile({
       <button
         className="text-xs font-bold text-blue-400"
         type="button"
-        onClick={handleFollowUser}
+        onClick={togglefollowing}
       >
         Follow
       </button>

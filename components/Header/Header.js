@@ -11,30 +11,21 @@ import {
   IoSearchOutline,
   IoAddCircleOutline,
 } from "react-icons/io5";
-import db, { auth } from "../../config/firebase";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { useDocument } from "react-firebase-hooks/firestore";
+import { auth } from "../../config/firebase";
 import { useEffect, useState, useRef } from "react";
 import { logout, selectUser, selectUserList } from "../../features/userSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { openMenuModal, openPostImageModal } from "../../features/modalSlice";
+import { openMenuModal } from "../../features/modalSlice";
+import useAuth from "../../hooks/useAuth";
 
 function Header({ usersList }) {
   const router = useRouter();
   const dispatch = useDispatch();
   const all_Users = useSelector(selectUserList);
 
-  const [user, loading] = useAuthState(auth);
-  const userRedux = useSelector(selectUser);
-  //const userRef = db.collection("users").doc(user?.uid);
-  //const [userData] = useDocument(user && userRef);
-  //const username = userData?.data().username;
-  //const userId = userData?.data().userId;
-  //const userImage = userData?.data().photoURL;
-  //const [userList, setUserList] = useState([]);
+  const { user } = useAuth();
   const dataList = all_Users;
 
-  const [toggle, setToggle] = useState(false);
   const searchRef = useRef(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
@@ -79,10 +70,6 @@ function Header({ usersList }) {
     router.push("/register");
   };
 
-  const navtoFollowerList = () => {
-    router.push("/followerlist");
-  };
-
   const togglelogout = () => {
     if (user) {
       router
@@ -92,6 +79,7 @@ function Header({ usersList }) {
         })
         .then(() => {
           dispatch(logout());
+          router.reload();
         });
     }
   };

@@ -7,7 +7,6 @@ import moment from "moment";
 import { useEffect, useState } from "react";
 
 function PostHeader({ username, userDocId, timestamp }) {
-  const userRef = db.collection("users").doc(userDocId);
   const [userData, setUserData] = useState([]);
   const userImage = userData?.photoURL;
   const userId = userData?.userId;

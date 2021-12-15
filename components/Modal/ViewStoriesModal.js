@@ -1,25 +1,13 @@
 import { useEffect, useState, useRef } from "react";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
-
-import { useAuthState } from "react-firebase-hooks/auth";
-import { useCollection, useDocument } from "react-firebase-hooks/firestore";
 import { useDispatch, useSelector } from "react-redux";
-import db, { auth } from "../../config/firebase";
+import db from "../../config/firebase";
 import { closeviewStoriesModal } from "../../features/modalSlice";
-import {
-  viewStories,
-  allStories,
-  quitViewedStory,
-} from "../../features/storiesSlice";
+import { viewStories, quitViewedStory } from "../../features/storiesSlice";
 function ViewStoriesModal() {
   const dispatch = useDispatch();
   const storyUserId = useSelector(viewStories);
-  const [user] = useAuthState(auth);
-  const userRef = db.collection("users").doc(user?.uid);
-  const [userData] = useDocument(user && userRef);
-  const userId = user?.uid;
-  const following = userData?.data().following;
   const [stories, setStorires] = useState([]);
 
   useEffect(() => {

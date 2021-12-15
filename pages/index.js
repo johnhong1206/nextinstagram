@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Head from "next/head";
 import dynamic from "next/dynamic";
-
+import useAuth from "../hooks/useAuth";
 //components
 const Header = dynamic(() => import("../components/Header/Header"));
 const Feeds = dynamic(() => import("../components/Feeds/Feeds"));
@@ -11,42 +11,26 @@ const ViewStoriesModal = dynamic(() =>
 const MenuModal = dynamic(() => import("../components/Modal/MenuModal"));
 
 //config
-import db, { auth } from "../config/firebase";
-import { useAuthState } from "react-firebase-hooks/auth";
+import db from "../config/firebase";
 
 //redux
 import { useDispatch, useSelector } from "react-redux";
-import { addUserList, login } from "../features/userSlice";
+import { addUserList } from "../features/userSlice";
 import {
   selectMenuModalIsOpen,
-  selectPostImageModalIsOpen,
-  selectPostStoriesModalIsOpen,
   selectViewStoriesModalIsOpen,
 } from "../features/modalSlice";
 
-export default function Home({ usersList, stories }) {
-  const [user] = useAuthState(auth);
-  //const userDataRef = db.collection("users").doc(user?.uid);
-  //const [userData, loading] = useDocument(userDataRef);
+export default function Home({ usersList }) {
+  const { user } = useAuth();
   const [userData, setUserData] = useState([]);
   const [photo, setPhoto] = useState([]);
   const [nouserPhoto, setNouserPhoto] = useState([]);
   const [myPhtoto, setMyphoto] = useState([]);
-
-  const userId = user?.uid;
-
-  //const { stories } = useStories(newUserData);
-
-  const openPostStoryModal = useSelector(selectPostStoriesModalIsOpen);
   const openViewStoriesModal = useSelector(selectViewStoriesModalIsOpen);
   const menuModal = useSelector(selectMenuModalIsOpen);
-  const postImageModal = useSelector(selectPostImageModalIsOpen);
-  //const [userList, setUserList] = useState([]);
-  //const [snapshot] = useCollectionOnce(db.collection("users"));
   const dispatch = useDispatch();
-
   const following = userData?.following;
-
   const [allphotos, setAllPhotos] = useState([]);
 
   useEffect(() => {
@@ -87,7 +71,7 @@ export default function Home({ usersList, stories }) {
     };
     fetchPhotos();
     return unsubscribe;
-  }, [db, following, user]);
+  }, [db, following, user, userData]);
 
   useEffect(() => {
     let unsubscribe;
@@ -133,22 +117,21 @@ export default function Home({ usersList, stories }) {
     return unsubscribe;
   }, [db, user]);
 
-  console.log("no user photo", nouserPhoto);
-
   useEffect(() => {
     let unsubscribe;
     const joinPhotos = () => {
-      let allphoto = [];
-      allphoto.push(
-        ...myPhtoto.sort((a, b) => b.timestamp - a.timestamp),
-        ...photo.sort((a, b) => b.timestamp - a.timestamp),
-        ...nouserPhoto
-      );
-      setAllPhotos(allphoto);
+      if (user) {
+        let allphoto = [];
+        allphoto.push(
+          ...myPhtoto.sort((a, b) => b.timestamp - a.timestamp),
+          ...photo.sort((a, b) => b.timestamp - a.timestamp)
+        );
+        setAllPhotos(allphoto);
+      }
     };
     joinPhotos();
     return unsubscribe;
-  }, [myPhtoto, photo]);
+  }, [user, myPhtoto, photo]);
 
   return (
     <div className="bg-gray-50 h-screen overflow-y-scroll scrollbar-hide">
@@ -158,7 +141,7 @@ export default function Home({ usersList, stories }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header usersList={JSON.parse(usersList)} />
-      <Feeds photo={allphotos} />
+      <Feeds photo={user ? allphotos : nouserPhoto} />
 
       {openViewStoriesModal && <ViewStoriesModal />}
       {menuModal && <MenuModal />}
@@ -166,7 +149,7 @@ export default function Home({ usersList, stories }) {
   );
 }
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps() {
   const ref = db.collection("users");
 
   const usersRes = await ref.get();

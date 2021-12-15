@@ -27,8 +27,6 @@ function Stories() {
   const [myStories, setMystories] = useState([]);
   const following = userData?.following;
 
-  console.log("stories", stories);
-
   const storiesUser = stories ? getUniqueValues(stories, "userId") : null;
   const myStoriesUser = myStories ? getUniqueValues(myStories, "userId") : null;
 

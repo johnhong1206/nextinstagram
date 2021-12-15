@@ -10,6 +10,7 @@ import Router from "next/router";
 import { auth } from "../config/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import Loading from "./loading";
+import { AuthProvider } from "../hooks/useAuth";
 
 const progress = new ProgressBar({
   size: 4,
@@ -31,7 +32,9 @@ function MyApp({ Component, pageProps }) {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <Component {...pageProps} />
+        <AuthProvider>
+          <Component {...pageProps} />
+        </AuthProvider>
       </PersistGate>
     </Provider>
   );

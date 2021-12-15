@@ -3,39 +3,23 @@ import { useSelector, useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import dynamic from "next/dynamic";
-
-import {
-  selectPhotos,
-  addPhoto,
-  addProfile,
-  selectProfile,
-  selectUser,
-} from "../../features/userSlice";
 import db, { auth } from "../../config/firebase";
+import { selectMenuModalIsOpen } from "../../features/modalSlice";
+import { AiOutlineInstagram } from "react-icons/ai";
+import { IoBookmarkOutline } from "react-icons/io5";
+import useAuth from "../../hooks/useAuth";
 
 const DynamicHeader = dynamic(() => import("../../components/Header/Header"));
-
 const DynamicUserBio = dynamic(() =>
   import("../../components/Profile/UserBio")
 );
-
 const DynamicUserPhoto = dynamic(() =>
   import("../../components/Profile/UserPhoto")
 );
 const MenuModal = dynamic(() => import("../../components/Modal/MenuModal"));
 
-import { AiOutlineInstagram } from "react-icons/ai";
-import { IoBookmarkOutline } from "react-icons/io5";
-
-import { useAuthState } from "react-firebase-hooks/auth";
-import {
-  selectMenuModalIsOpen,
-  selectPostImageModalIsOpen,
-} from "../../features/modalSlice";
-
 function Profile({ usersList }) {
-  const dispatch = useDispatch();
-  const [user] = useAuthState(auth);
+  const { user } = useAuth();
   const router = useRouter();
   const [userData, setUserData] = useState([]);
   const [photo, setPhoto] = useState([]);

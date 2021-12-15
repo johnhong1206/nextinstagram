@@ -1,22 +1,11 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
 import Skeleton from "react-loading-skeleton";
-import db, { auth, storage } from "../../config/firebase";
-import { useCollection } from "react-firebase-hooks/firestore";
-import {
-  AiOutlineInstagram,
-  AiOutlineEdit,
-  AiOutlineMessage,
-} from "react-icons/ai";
+import db from "../../config/firebase";
+import { AiOutlineEdit, AiOutlineMessage } from "react-icons/ai";
 import { useRouter } from "next/router";
-import { isUserFollowingProfile, toggleFollow } from "../../service/firebase";
-import { useSelector, useDispatch } from "react-redux";
-import { selectProfile, selectUser } from "../../features/userSlice";
-
-import { openPostImageModal } from "../../features/modalSlice";
-import { MdModeEdit, MdUpdate } from "react-icons/md";
-import { BsFillImageFill } from "react-icons/bs";
+import { MdUpdate } from "react-icons/md";
 import firebase from "firebase";
+import useAuth from "../../hooks/useAuth";
 
 function UserBio({
   fullName,
@@ -33,7 +22,7 @@ function UserBio({
 }) {
   const router = useRouter();
 
-  const [user] = useAuthState(auth);
+  const { user } = useAuth();
   const biosRef = useRef(null);
   const [editProfile, setEditProfile] = useState(false);
   const [userData, setUserData] = useState([]);
@@ -158,6 +147,10 @@ function UserBio({
       });
   };
 
+  const navUploadProfileImage = (e) => {
+    router.push("/Profileimageupload");
+  };
+
   return (
     <div className="p-4 w-full max-w-screen flex items-center justify-center shadow-lg">
       <div className="w-1/3 flex flex-grow items-center justify-center">
@@ -168,7 +161,14 @@ function UserBio({
             src={image}
           />
         ) : (
-          <button>Upload image</button>
+          <div
+            onClick={navUploadProfileImage}
+            className="bg-blue-500 px-10 py-2  rounded-full xl:rounded-xl hover:shadow-2xl cursor-pointer animate-pulse"
+          >
+            <p className="text-white text-center font-bold text-xs">
+              Upload image
+            </p>
+          </div>
         )}
       </div>
       <div className="ml-3 w-3/5 lg:w-full">

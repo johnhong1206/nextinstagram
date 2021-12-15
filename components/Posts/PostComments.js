@@ -1,13 +1,12 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import dynamic from "next/dynamic";
 const AddComment = dynamic(() => import("./AddComment"));
 
 import Link from "next/link";
-import { auth } from "../../config/firebase";
-import { useAuthState } from "react-firebase-hooks/auth";
+import useAuth from "../../hooks/useAuth";
 
 function PostComments({ docId, comments: allComments, posted, commentInput }) {
-  const [user] = useAuthState(auth);
+  const { user } = useAuth();
   const [comments, setComments] = useState(allComments);
   const [commentsSlice, setCommentsSlice] = useState(2);
   const showNextComments = () => {
