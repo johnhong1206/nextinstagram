@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import Head from "next/head";
+import db from "../config/firebase";
 
-import Skeleton from "react-loading-skeleton";
-import db, { auth } from "../config/firebase";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { useDocument } from "react-firebase-hooks/firestore";
 const Header = dynamic(() => import("../components/Header/Header"));
 const User = dynamic(() => import("../components/Feeds/Sidebar/User"));
 const Suggestion = dynamic(() =>
@@ -16,11 +13,12 @@ const MenuModal = dynamic(() => import("../components/Modal/MenuModal"));
 
 import { selectMenuModalIsOpen } from "../features/modalSlice";
 import { useSelector } from "react-redux";
+import useAuth from "../hooks/useAuth";
 
 function Followerlist() {
   const menuModal = useSelector(selectMenuModalIsOpen);
+  const { user } = useAuth();
 
-  const [user] = useAuthState(auth);
   const [userData, setUserData] = useState([]);
 
   useEffect(() => {

@@ -1,11 +1,11 @@
 import { useState } from "react";
-import db, { auth } from "../../config/firebase";
-import { useAuthState } from "react-firebase-hooks/auth";
+import db from "../../config/firebase";
 import firebase from "firebase";
+import useAuth from "../../hooks/useAuth";
 
 function AddComment({ docId, comments, setComments, commentInput }) {
   const [comment, setComment] = useState("");
-  const [user] = useAuthState(auth);
+  const { user } = useAuth();
   const displayName = user?.displayName;
 
   const handleSubmitComment = (event) => {

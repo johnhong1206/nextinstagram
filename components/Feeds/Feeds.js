@@ -8,22 +8,8 @@ const Suggestion = dynamic(() => import("./Sidebar/Suggestion"));
 const User = dynamic(() => import("./Sidebar/User"));
 const Stories = dynamic(() => import("../Story/Stories"));
 
-function Feeds({ noUserphotos, stories, photo }) {
+function Feeds({ stories, photo, userData }) {
   const { user } = useAuth();
-  const [userData, setUserData] = useState([]);
-
-  useEffect(() => {
-    db.collection("users")
-      .doc(user?.uid)
-      .get()
-      .then((documentSnapshot) => {
-        if (!documentSnapshot.exists) {
-        } else {
-          //console.log('User data: ', documentSnapshot.data());
-          setUserData(documentSnapshot.data());
-        }
-      });
-  }, [db, user]);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 md:max-w-3xl xl:grid-cols-3 xl:max-w-6xl mx-auto">

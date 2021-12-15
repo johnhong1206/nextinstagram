@@ -1,16 +1,14 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
 import { useCollection } from "react-firebase-hooks/firestore";
-import db, { auth } from "../../config/firebase";
+import db from "../../config/firebase";
 import getRecipientUid from "../../service/getRecipientUid";
-import { useDispatch, useSelector } from "react-redux";
-import { addChatlist, selectChatlist } from "../../features/userSlice";
+import useAuth from "../../hooks/useAuth";
 
-function PersonChatllist({ id, users, displayName }) {
+function PersonChatllist({ id, users }) {
   const router = useRouter();
-  const [user] = useAuthState(auth);
+  const { user } = useAuth();
   const [lastMessage, setLastMessage] = useState("");
 
   const [recipientSnapShot] = useCollection(
@@ -35,10 +33,8 @@ function PersonChatllist({ id, users, displayName }) {
     return unsubscribe;
   }, [db, id]);
 
-  console.log(`${id} lastMessage`, lastMessage);
-
   return (
-    <div className="container p-4 lg:p-0 col-span-3 lg:col-span-2">
+    <div className="container p-4 lg:p-0 col-span-3 lg:col-span-2 mt-9">
       <div
         key={id}
         onClick={enterChat}

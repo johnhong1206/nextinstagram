@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { useDocument } from "react-firebase-hooks/firestore";
+
 import { AiOutlinePlusCircle } from "react-icons/ai";
-import db, { auth } from "../../config/firebase";
+import db from "../../config/firebase";
 import { useRouter } from "next/router";
 
 //components
@@ -16,12 +15,13 @@ import { getUniqueValues } from "../../utils/helper";
 import { useDispatch } from "react-redux";
 import { openviewStoriesModal } from "../../features/modalSlice";
 import { updateViewedStory } from "../../features/storiesSlice";
+import useAuth from "../../hooks/useAuth";
 
 function Stories() {
   const router = useRouter();
 
   const dispatch = useDispatch();
-  const [user] = useAuthState(auth);
+  const { user } = useAuth();
   const [userData, setUserData] = useState([]);
   const [stories, setStories] = useState([]);
   const [myStories, setMystories] = useState([]);

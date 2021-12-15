@@ -1,12 +1,11 @@
 import React from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { auth } from "../../config/firebase";
 import moment from "moment";
 import db from "../../config/firebase";
 import { useDocument } from "react-firebase-hooks/firestore";
+import useAuth from "../../hooks/useAuth";
 
 function Message({ username, message, email, photoURL, userId }) {
-  const [user, loading] = useAuthState(auth);
+  const { user } = useAuth();
   const userRef = db.collection("users").doc(userId);
   const [userData] = useDocument(userId && userRef);
   const userImage = userData?.data().photoURL;

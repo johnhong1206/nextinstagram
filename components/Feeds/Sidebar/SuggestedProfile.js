@@ -17,7 +17,6 @@ function SuggestedProfile({
   userId,
 }) {
   const [followed, setFollowed] = useState(false);
-  const { user } = useAuth();
   const router = useRouter();
 
   const togglefollowing = async () => {

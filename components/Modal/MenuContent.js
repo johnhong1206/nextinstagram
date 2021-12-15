@@ -15,12 +15,13 @@ import {
 import { logout } from "../../features/userSlice";
 import { useDispatch } from "react-redux";
 import { closemenuModal } from "../../features/modalSlice";
+import useAuth from "../../hooks/useAuth";
 
 function MenuContent() {
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const [user, loading] = useAuthState(auth);
+  const { user } = useAuth();
 
   const navtoHome = (e) => {
     router.push("/");

@@ -9,14 +9,14 @@ const PersonChatllist = dynamic(() =>
 );
 const MenuModal = dynamic(() => import("../../components/Modal/MenuModal"));
 
-import db, { auth } from "../../config/firebase";
+import db from "../../config/firebase";
 import { selectMenuModalIsOpen } from "../../features/modalSlice";
-import { useAuthState } from "react-firebase-hooks/auth";
+import useAuth from "../../hooks/useAuth";
 
 function Index() {
   const menuModal = useSelector(selectMenuModalIsOpen);
 
-  const [user] = useAuthState(auth);
+  const { user } = useAuth();
   const [chatSnapshot, setChatSnapshot] = useState([]);
 
   useEffect(() => {

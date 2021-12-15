@@ -5,18 +5,16 @@ import Head from "next/head";
 const ChatHeader = dynamic(() => import("../../components/Chat/ChatHeader"));
 const Message = dynamic(() => import("../../components/Chat/Message"));
 
-import db, { auth } from "../../config/firebase";
+import db from "../../config/firebase";
 import firebase from "firebase";
 
 import { useEffect, useRef, useState } from "react";
-import { useCollection, useDocument } from "react-firebase-hooks/firestore";
+import { useCollection } from "react-firebase-hooks/firestore";
 
-import { useSelector } from "react-redux";
-import { selectUser } from "../../features/userSlice";
-import { useAuthState } from "react-firebase-hooks/auth";
+import useAuth from "../../hooks/useAuth";
 
 function ChatScreen({ chat, messages }) {
-  const [user] = useAuthState(auth);
+  const { user } = useAuth();
   const [userData, setUserData] = useState([]);
 
   const router = useRouter();

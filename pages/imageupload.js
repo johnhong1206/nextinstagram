@@ -10,11 +10,11 @@ import { useRouter } from "next/router";
 import Head from "next/head";
 import { useSelector } from "react-redux";
 import { selectUser } from "../features/userSlice";
+import useAuth from "../hooks/useAuth";
 
 function ImageUpload() {
-  const [user] = useAuthState(auth);
+  const { user } = useAuth();
   const [userData, setUserData] = useState([]);
-
   const inputRef = useRef(null);
   const imgPickerRef = useRef(null);
   const [imgToPost, setImgtoPost] = useState(null);

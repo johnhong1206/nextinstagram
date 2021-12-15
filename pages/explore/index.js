@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Head from "next/head";
-
 import dynamic from "next/dynamic";
 
-import { useCollection } from "react-firebase-hooks/firestore";
 const Header = dynamic(() => import("../../components/Header/Header"));
 const ExplorePost = dynamic(() =>
   import("../../components/Explore/ExplorePost")

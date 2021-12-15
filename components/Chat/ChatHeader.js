@@ -1,22 +1,17 @@
 import { useRouter } from "next/router";
 import Image from "next/image";
 
-import db, { auth } from "../../config/firebase";
-import { useAuthState } from "react-firebase-hooks/auth";
+import db from "../../config/firebase";
 import { useDocument } from "react-firebase-hooks/firestore";
 import { useState } from "react";
 import { AiOutlineArrowLeft, AiFillHome } from "react-icons/ai";
 import { useCollection } from "react-firebase-hooks/firestore";
 import getRecipientUid from "../../service/getRecipientUid";
+import useAuth from "../../hooks/useAuth";
 
 function ChatHeader({ chat }) {
   const router = useRouter();
-  const [user, loading] = useAuthState(auth);
-  const userRef = db.collection("users").doc(user?.uid);
-  const [userData] = useDocument(user && userRef);
-  const username = userData?.data().username;
-  const userId = userData?.data().userId;
-  const [toggle, setToggle] = useState(false);
+  const { user } = useAuth();
 
   const navtoHome = (e) => {
     router.push("/");

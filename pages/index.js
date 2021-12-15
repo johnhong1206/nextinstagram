@@ -141,7 +141,7 @@ export default function Home({ usersList }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header usersList={JSON.parse(usersList)} />
-      <Feeds photo={user ? allphotos : nouserPhoto} />
+      <Feeds photo={user ? allphotos : nouserPhoto} userData={userData} />
 
       {openViewStoriesModal && <ViewStoriesModal />}
       {menuModal && <MenuModal />}
