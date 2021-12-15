@@ -1,14 +1,11 @@
 import { useRef, useState, useEffect } from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
-import db, { auth, storage } from "../config/firebase";
-import { BsFillImageFill } from "react-icons/bs";
-import Header from "../components/Header/Header";
-
-import { AiFillInstagram } from "react-icons/ai";
-import firebase from "firebase";
-import { useRouter } from "next/router";
 import Head from "next/head";
+import { useRouter } from "next/router";
 import useAuth from "../hooks/useAuth";
+import Header from "../components/Header/Header";
+import db, { storage } from "../config/firebase";
+import { BsFillImageFill } from "react-icons/bs";
+import { AiFillInstagram } from "react-icons/ai";
 
 function Profileimageupload() {
   const { user } = useAuth();

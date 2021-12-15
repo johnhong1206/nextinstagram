@@ -68,7 +68,7 @@ export default function Home({ usersList }) {
             );
           });
       } else {
-        db.collection("photos").onSnapshot((snapshot) => {
+        unsubscribe = db.collection("photos").onSnapshot((snapshot) => {
           setNouserPhoto(
             snapshot?.docs.slice(0, 2).map((doc) => ({
               id: doc?.id,

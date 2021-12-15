@@ -1,4 +1,5 @@
 import dynamic from "next/dynamic";
+import Skeleton from "react-loading-skeleton";
 const Posts = dynamic(() => import("../../Posts/Posts"));
 
 function Timeline({ photo }) {
