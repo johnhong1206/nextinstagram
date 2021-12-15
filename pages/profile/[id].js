@@ -41,7 +41,7 @@ function Profile({ usersList }) {
             if (!documentSnapshot.exists) {
             } else {
               //console.log('User data: ', documentSnapshot.data());
-              setUserData(documentSnapshot.data());
+              setUserDatas(documentSnapshot.data());
             }
           });
       };

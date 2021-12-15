@@ -113,7 +113,7 @@ function StoryUpload() {
 
   return (
     <>
-      <Header />
+      <Header userData={userData} />
       <div className="bg-white p-2 rounded-2xl shadow-md text-gray-500 font-medium mt-6">
         {imgToPost && (
           <div
