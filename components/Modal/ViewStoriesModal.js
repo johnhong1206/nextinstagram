@@ -37,8 +37,9 @@ function ViewStoriesModal() {
   };
 
   console.log(stories);
+
   return (
-    <div className="fixed z-50 inset-1 overflow-y-auto ">
+    <div onClick={quitView} className="fixed z-50 inset-1 overflow-y-auto ">
       <div className="flex items-center justify-center w-full h-full bg-black bg-opacity-50">
         <div className="">
           <Carousel

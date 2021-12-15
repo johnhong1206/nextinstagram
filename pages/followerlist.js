@@ -22,10 +22,11 @@ function Followerlist() {
   const [userData, setUserData] = useState([]);
 
   useEffect(() => {
-    let unsubscribe;
-    const fetchUserData = () => {
-      if (user) {
-        db.collection("users")
+    if (user) {
+      let unsubscribe;
+      const fetchUSerData = () => {
+        unsubscribe = db
+          .collection("users")
           .doc(user?.uid)
           .get()
           .then((documentSnapshot) => {
@@ -35,10 +36,10 @@ function Followerlist() {
               setUserData(documentSnapshot.data());
             }
           });
-      }
-    };
-    fetchUserData();
-    return unsubscribe;
+      };
+      fetchUSerData();
+      return unsubscribe;
+    }
   }, [db, user]);
 
   return (

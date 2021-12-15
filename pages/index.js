@@ -34,16 +34,24 @@ export default function Home({ usersList }) {
   const [allphotos, setAllPhotos] = useState([]);
 
   useEffect(() => {
-    db.collection("users")
-      .doc(user?.uid)
-      .get()
-      .then((documentSnapshot) => {
-        if (!documentSnapshot.exists) {
-        } else {
-          //console.log('User data: ', documentSnapshot.data());
-          setUserData(documentSnapshot.data());
-        }
-      });
+    if (user) {
+      let unsubscribe;
+      const fetchUSerData = () => {
+        unsubscribe = db
+          .collection("users")
+          .doc(user?.uid)
+          .get()
+          .then((documentSnapshot) => {
+            if (!documentSnapshot.exists) {
+            } else {
+              //console.log('User data: ', documentSnapshot.data());
+              setUserData(documentSnapshot.data());
+            }
+          });
+      };
+      fetchUSerData();
+      return unsubscribe;
+    }
   }, [db, user]);
 
   useEffect(() => {

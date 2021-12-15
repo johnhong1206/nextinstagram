@@ -22,16 +22,24 @@ function Index() {
   const [chatSnapshot, setChatSnapshot] = useState([]);
 
   useEffect(() => {
-    db.collection("users")
-      .doc(user?.uid)
-      .get()
-      .then((documentSnapshot) => {
-        if (!documentSnapshot.exists) {
-        } else {
-          //console.log('User data: ', documentSnapshot.data());
-          setUserData(documentSnapshot.data());
-        }
-      });
+    if (user) {
+      let unsubscribe;
+      const fetchUSerData = () => {
+        unsubscribe = db
+          .collection("users")
+          .doc(user?.uid)
+          .get()
+          .then((documentSnapshot) => {
+            if (!documentSnapshot.exists) {
+            } else {
+              //console.log('User data: ', documentSnapshot.data());
+              setUserData(documentSnapshot.data());
+            }
+          });
+      };
+      fetchUSerData();
+      return unsubscribe;
+    }
   }, [db, user]);
 
   useEffect(() => {
@@ -54,6 +62,7 @@ function Index() {
   }, [db, user]);
 
   console.log(chatSnapshot);
+
   return (
     <div className="">
       <Head>
@@ -67,8 +76,8 @@ function Index() {
           <div className="flex flex-col flex-grow w-2/3">
             {chatSnapshot?.map((chat) => (
               <PersonChatllist
-                key={chat.id}
-                id={chat.id}
+                key={chat?.id}
+                id={chat?.id}
                 users={chat?.users}
                 displayName={chat?.displayName}
               />

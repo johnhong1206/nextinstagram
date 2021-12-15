@@ -17,15 +17,24 @@ function Profileimageupload() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    let unsubscribe;
-    const fetchUserData = () => {
-      unsubscribe = db
-        .collection("users")
-        .doc(user?.uid)
-        .onSnapshot((snapshot) => setUserData(snapshot.data()));
-    };
-    fetchUserData();
-    return unsubscribe;
+    if (user) {
+      let unsubscribe;
+      const fetchUSerData = () => {
+        unsubscribe = db
+          .collection("users")
+          .doc(user?.uid)
+          .get()
+          .then((documentSnapshot) => {
+            if (!documentSnapshot.exists) {
+            } else {
+              //console.log('User data: ', documentSnapshot.data());
+              setUserData(documentSnapshot.data());
+            }
+          });
+      };
+      fetchUSerData();
+      return unsubscribe;
+    }
   }, [db, user]);
 
   const addImgtoPost = (e) => {

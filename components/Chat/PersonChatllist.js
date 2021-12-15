@@ -12,7 +12,8 @@ function PersonChatllist({ id, users }) {
   const [lastMessage, setLastMessage] = useState("");
 
   const [recipientSnapShot] = useCollection(
-    db.collection("users").where("userId", "==", getRecipientUid(users, user))
+    user &&
+      db.collection("users").where("userId", "==", getRecipientUid(users, user))
   );
 
   const recipient = recipientSnapShot?.docs?.[0]?.data();

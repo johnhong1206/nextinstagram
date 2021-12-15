@@ -52,17 +52,24 @@ function UserBio({
   console.log(chatSnapshot);
 
   useEffect(() => {
-    let unsubscribe;
-    const fetchUserData = () => {
-      if (user) {
+    if (user) {
+      let unsubscribe;
+      const fetchUSerData = () => {
         unsubscribe = db
           .collection("users")
           .doc(user?.uid)
-          .onSnapshot((snapshot) => setUserData(snapshot.data()));
-      }
-    };
-    fetchUserData();
-    return unsubscribe;
+          .get()
+          .then((documentSnapshot) => {
+            if (!documentSnapshot.exists) {
+            } else {
+              //console.log('User data: ', documentSnapshot.data());
+              setUserData(documentSnapshot.data());
+            }
+          });
+      };
+      fetchUSerData();
+      return unsubscribe;
+    }
   }, [db, user]);
 
   const followingsss = userData?.following?.includes(profileDocId);
@@ -156,7 +163,7 @@ function UserBio({
       <div className="w-1/3 flex flex-grow items-center justify-center">
         {!editProfile ? (
           <img
-            className="rounded-full h-40 w-40 lg:h-80 lg:w-80 flex"
+            className="rounded-full h-32 w-32 lg:h-80 lg:w-80 flex"
             alt={`${profileUsername} profile picture`}
             src={image}
           />
