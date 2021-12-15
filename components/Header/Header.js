@@ -100,6 +100,10 @@ function Header({ usersList, userData }) {
     dispatch(openMenuModal());
   };
 
+  const togglePostImageModal = () => {
+    dispatch(openMenuModal());
+  };
+
   return (
     <header className="h-16 sticky top-0 z-40 bg-white border-b border-gray-100 mb-8 shadow-md">
       <div className=" container mx-auto max-w-screen-lg h-full">
