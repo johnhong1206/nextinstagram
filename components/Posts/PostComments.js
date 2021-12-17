@@ -1,17 +1,33 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
+import db from "../../config/firebase";
+
 const AddComment = dynamic(() => import("./AddComment"));
 
 import Link from "next/link";
 import useAuth from "../../hooks/useAuth";
 
-function PostComments({ docId, comments: allComments, posted, commentInput }) {
+function PostComments({ docId, commentInput }) {
   const { user } = useAuth();
-  const [comments, setComments] = useState(allComments);
+  const [comments, setComments] = useState([]);
   const [commentsSlice, setCommentsSlice] = useState(2);
   const showNextComments = () => {
     setCommentsSlice(commentsSlice + 2);
   };
+
+  useEffect(() => {
+    db.collection("photos")
+      .doc(docId)
+      .collection("comments")
+      .onSnapshot((snapshot) => {
+        setComments(
+          snapshot?.docs.map((doc) => ({
+            id: doc?.id,
+            ...doc?.data(),
+          }))
+        );
+      });
+  }, [db, docId]);
 
   return (
     <>

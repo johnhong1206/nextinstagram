@@ -12,6 +12,8 @@ function UserPhoto({ photo }) {
     router.push(`/profile/${photo?.userid}`);
   };
 
+  console.log(photo);
+
   return (
     <div className="">
       <div className="">

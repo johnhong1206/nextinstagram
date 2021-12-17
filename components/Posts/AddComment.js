@@ -10,18 +10,13 @@ function AddComment({ docId, comments, setComments, commentInput }) {
 
   const handleSubmitComment = (event) => {
     event.preventDefault();
-    setComments([...comments, { displayName, comment }]);
+    db.collection("photos").doc(docId).collection("comments").add({
+      uid: user?.uid,
+      displayName: displayName,
+      comment: comment,
+      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+    });
     setComment("");
-
-    return db
-      .collection("photos")
-      .doc(docId)
-      .update({
-        comments: firebase.firestore.FieldValue.arrayUnion({
-          displayName,
-          comment,
-        }),
-      });
   };
 
   return (
