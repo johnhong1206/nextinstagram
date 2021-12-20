@@ -39,7 +39,7 @@ function Index() {
     const fetchPhotos = () => {
       unsubscribe = db.collection("photos").onSnapshot((snapshot) => {
         setPhotoSnapshot(
-          snapshot?.docs.slice(0, 2).map((doc) => ({
+          snapshot?.docs.map((doc) => ({
             id: doc?.id,
             ...doc?.data(),
           }))

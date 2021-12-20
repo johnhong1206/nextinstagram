@@ -49,8 +49,6 @@ function UserBio({
     return unsubscribe;
   }, [db, user]);
 
-  console.log(chatSnapshot);
-
   useEffect(() => {
     if (user) {
       let unsubscribe;
