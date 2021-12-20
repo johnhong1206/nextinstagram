@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import db from "../../config/firebase";
 import { closeviewStoriesModal } from "../../features/modalSlice";
 import { viewStories, quitViewedStory } from "../../features/storiesSlice";
+import { IoChevronBackOutline } from "react-icons/io5";
 function ViewStoriesModal() {
   const dispatch = useDispatch();
   const storyUserId = useSelector(viewStories);
@@ -39,9 +40,13 @@ function ViewStoriesModal() {
   console.log(stories);
 
   return (
-    <div onClick={quitView} className="fixed z-50 inset-1 overflow-y-auto ">
-      <div className="flex items-center justify-center w-full h-full bg-black bg-opacity-50">
-        <div className="">
+    <div className="fixed z-50 inset-1 overflow-y-auto ">
+      <div className="flex items-center justify-center w-full h-full bg-black bg-opacity-50 ">
+        <div className="relative">
+          <IoChevronBackOutline
+            onClick={quitView}
+            className="w-8 h-8 text-white absotule -top-2 left-0"
+          />
           <Carousel
             autoPlay
             infiniteLoop
@@ -51,7 +56,7 @@ function ViewStoriesModal() {
             interval={10000}
           >
             {stories.map((story) => (
-              <div key={story?.id} onClick={quitView}>
+              <div key={story?.id}>
                 <img
                   src={story?.image}
                   className="w-[550px] h-[550px] object-contain"
