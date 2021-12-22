@@ -29,6 +29,8 @@ function Profile({ usersList }) {
   const [phase, setPhase] = useState("Photo");
   const menuModal = useSelector(selectMenuModalIsOpen);
 
+  console.log(photo);
+
   useEffect(() => {
     if (user) {
       let unsubscribe;
@@ -66,21 +68,17 @@ function Profile({ usersList }) {
     let unsubscribe;
 
     const fetchPhotos = () => {
-      if (user) {
-        unsubscribe = db
-          .collection("photos")
-          .where("userId", "==", router.query.id)
-          .onSnapshot((snapshot) => {
-            setPhoto(
-              snapshot?.docs.map((doc) => ({
-                id: doc?.id,
-                ...doc?.data(),
-              }))
-            );
-          });
-      } else {
-        setPhoto([]);
-      }
+      unsubscribe = db
+        .collection("photos")
+        .where("userId", "==", router.query.id)
+        .onSnapshot((snapshot) => {
+          setPhoto(
+            snapshot?.docs.map((doc) => ({
+              id: doc?.id,
+              ...doc?.data(),
+            }))
+          );
+        });
     };
     fetchPhotos();
     return unsubscribe;

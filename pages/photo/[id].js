@@ -165,7 +165,7 @@ function Photo() {
                 </div>
                 <div className="p-4 pt-2 pb-1">
                   {comments?.slice(0, commentsSlice).map((item) => (
-                    <div className="my-2">
+                    <div key={item?.id} className="my-2">
                       <p
                         key={`${item.comment}-${item.displayName}`}
                         className=""
