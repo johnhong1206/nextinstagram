@@ -1,21 +1,36 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import { AiFillHeart } from "react-icons/ai";
 import { BsFillChatFill } from "react-icons/bs";
 import Image from "next/image";
+import db from "../../config/firebase";
 import { useRouter } from "next/router";
 
-function UserPhoto({ photo }) {
+function UserPhoto({ photo, key, id }) {
   const router = useRouter();
+  const [comments, setComments] = useState([]);
 
   const navProfile = () => {
-    router.push(`/profile/${photo?.userid}`);
+    router.push(`/photo/${id}`);
   };
 
-  console.log(photo);
+  useEffect(() => {
+    db.collection("photos")
+      .doc(id)
+      .collection("comments")
+      .orderBy("timestamp", "desc")
+      .onSnapshot((snapshot) => {
+        setComments(
+          snapshot?.docs.map((doc) => ({
+            id: doc?.id,
+            ...doc?.data(),
+          }))
+        );
+      });
+  }, [db, router.query.id]);
 
   return (
-    <div className="">
+    <div key={key} className="">
       <div className="">
         {!photo ? (
           new Array(12)
@@ -55,7 +70,7 @@ function UserPhoto({ photo }) {
                 <BsFillChatFill
                   className={`w-8 h-8 mr-4 select-none cursor-pointer focus:outline-none text-gray-100 `}
                 />
-                {photo.comments.length}
+                {comments?.length}
               </p>
             </div>
           </div>

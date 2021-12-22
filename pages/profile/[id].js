@@ -64,15 +64,25 @@ function Profile({ usersList }) {
 
   useEffect(() => {
     let unsubscribe;
-    const getPhotos = () => {
-      unsubscribe = db
-        .collection("photos")
-        .where("userId", "==", router.query.id)
-        .onSnapshot((snapshot) =>
-          setPhoto(snapshot.docs.map((doc) => doc.data()))
-        );
+
+    const fetchPhotos = () => {
+      if (user) {
+        unsubscribe = db
+          .collection("photos")
+          .where("userId", "==", router.query.id)
+          .onSnapshot((snapshot) => {
+            setPhoto(
+              snapshot?.docs.map((doc) => ({
+                id: doc?.id,
+                ...doc?.data(),
+              }))
+            );
+          });
+      } else {
+        setPhoto([]);
+      }
     };
-    getPhotos();
+    fetchPhotos();
     return unsubscribe;
   }, [db, router.query.id]);
 
@@ -151,14 +161,14 @@ function Profile({ usersList }) {
         {phase == "Photo" && (
           <div className="px-5 my-10 gap-8 sm:grid md:grid-cols-2 xl:grid-cols-3 3xl:flex flex-wrap items-center justify-center">
             {photo.map((photo) => (
-              <DynamicUserPhoto key={photo.id} photo={photo} />
+              <DynamicUserPhoto key={photo.id} photo={photo} id={photo?.id} />
             ))}
           </div>
         )}
         {phase == "Saved" && (
           <div className="px-5 my-10 gap-8 sm:grid md:grid-cols-2 xl:grid-cols-3 3xl:flex flex-wrap items-center justify-center">
             {savephoto.map((photo) => (
-              <DynamicUserPhoto key={photo.id} photo={photo} />
+              <DynamicUserPhoto key={photo.id} photo={photo} id={photo?.id} />
             ))}
           </div>
         )}

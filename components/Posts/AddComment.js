@@ -33,7 +33,7 @@ function AddComment({ docId, comments, setComments, commentInput }) {
         <input
           aria-label="Add a comment"
           autoComplete="off"
-          className="text-sm text-gray-base w-full mr-3 py-5 px-4"
+          className="text-sm text-gray-base w-full mr-3 py-5 px-4  border-0"
           type="text"
           name="add-comment"
           placeholder="Add a comment..."

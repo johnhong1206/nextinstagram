@@ -19,6 +19,7 @@ function PostComments({ docId, commentInput }) {
     db.collection("photos")
       .doc(docId)
       .collection("comments")
+      .orderBy("timestamp", "desc")
       .onSnapshot((snapshot) => {
         setComments(
           snapshot?.docs.map((doc) => ({

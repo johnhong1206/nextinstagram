@@ -10,6 +10,7 @@ import {
   IoChatboxOutline,
   IoSearchOutline,
   IoAddCircleOutline,
+  IoArrowBackOutline,
 } from "react-icons/io5";
 import { auth } from "../../config/firebase";
 import { useEffect, useState, useRef } from "react";
@@ -18,7 +19,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { openMenuModal } from "../../features/modalSlice";
 import useAuth from "../../hooks/useAuth";
 
-function Header({ usersList, userData }) {
+function Header({ usersList, userData, goback, navProfile }) {
   const router = useRouter();
   const dispatch = useDispatch();
   const all_Users = useSelector(selectUserList);
@@ -109,13 +110,19 @@ function Header({ usersList, userData }) {
       <div className=" container mx-auto max-w-screen-lg h-full">
         <div className="flex items-center justify-between h-full">
           <div className=" text-gray-700 text-center flex items-center cursor-pointer align-items">
-            <h1 onClick={navtoHome} className="flex justify-center w-full">
-              <img
-                src="/images/logo.png"
-                alt="logo"
-                className="mt-2 w-6/12 cursor-pointer"
-              />
-            </h1>
+            {!goback ? (
+              <h1 onClick={navtoHome} className="flex justify-center w-full">
+                <img
+                  src="/images/logo.png"
+                  alt="logo"
+                  className="mt-2 w-6/12 cursor-pointer"
+                />
+              </h1>
+            ) : (
+              <div onClick={navProfile} className="px-4">
+                <IoArrowBackOutline className="w-6 h-6 text-gray-500" />
+              </div>
+            )}
           </div>
           <div className=" relative mt-1 p-3 rounded-md flex-shrink lg:flex-grow ">
             <div className="absolute inset-y-0 pl-3 flex items-center pointer-events-none">
