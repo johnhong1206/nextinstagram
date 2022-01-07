@@ -1,9 +1,7 @@
 This is instagram like webpage
+This Project is built by Istagram clone built with NextJs, Redux, ContextAPI, Tailwind CSS and Firebase
 
-
-
-
-The native app is https://github.com/johnhong1206/RNInstagram
+The native app of this webpage is https://github.com/johnhong1206/RNInstagram
 
 ---Main Function---
 1) Posts function
