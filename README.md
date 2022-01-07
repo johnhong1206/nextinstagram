@@ -1,4 +1,5 @@
 This is instagram like webpage
+-------------------------------------------------------------------------------
 The native app is https://github.com/johnhong1206/RNInstagram
 
 ---Main Function---
