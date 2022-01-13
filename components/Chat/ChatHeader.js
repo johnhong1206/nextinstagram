@@ -32,7 +32,7 @@ function ChatHeader({ chat }) {
   const recipient = recipientSnapShot?.docs[0]?.data();
 
   return (
-    <header className="h-16 bg-white border-b border-gray-100 mb-8 shadow-md">
+    <header className="h-16 bg-white border-b border-gray-100 mb-8 shadow-md sticky top-0 z-50">
       <div className=" container mx-auto max-w-screen-lg h-full">
         <div className="flex items-center justify-between h-full px-3">
           <div>
