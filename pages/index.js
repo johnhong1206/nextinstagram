@@ -145,7 +145,11 @@ export default function Home({ usersList }) {
   );
 }
 
-export async function getServerSideProps() {
+export async function getServerSideProps({ req, res }) {
+  res.setHeader(
+    "Cache-Control",
+    "public, s-maxage=10, stale-while-revalidate=59"
+  );
   const ref = db.collection("users");
 
   const usersRes = await ref.get();

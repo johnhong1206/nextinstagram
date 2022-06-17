@@ -179,7 +179,11 @@ function Profile({ usersList }) {
 
 export default Profile;
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps({ req, res }) {
+  res.setHeader(
+    "Cache-Control",
+    "public, s-maxage=10, stale-while-revalidate=59"
+  );
   const uesrRef = db.collection("users");
   const usersRes = await uesrRef.get();
   const users = usersRes.docs.map((user) => ({
